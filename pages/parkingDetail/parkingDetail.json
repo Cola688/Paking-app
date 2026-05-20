@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "停车场详情",
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "navbar": "/components/navbar/navbar"
+  }
+}

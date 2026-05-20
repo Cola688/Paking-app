@@ -1,0 +1,60 @@
+<view class="container">
+  <navbar title="套餐详情" />
+
+  <view wx:if="{{loading}}" class="loading">加载中...</view>
+
+  <block wx:elif="{{product}}">
+    <view class="hero-card">
+      <view class="hero-top">
+        <text class="product-type">{{product.productTypeName}}</text>
+        <text class="owned-tag" wx:if="{{product.owned}}">已拥有</text>
+      </view>
+      <text class="product-name">{{product.productName}}</text>
+      <text class="price">{{product.displayPriceText}}</text>
+      <text class="desc">{{product.description || '适用于指定停车场'}}</text>
+    </view>
+
+    <view class="rules-grid">
+      <view class="rule-item">
+        <text class="rule-value">{{product.durationDays || '-'}}</text>
+        <text class="rule-label">有效天数</text>
+      </view>
+      <view class="rule-item">
+        <text class="rule-value">{{maxSelectLotCount}}</text>
+        <text class="rule-label">可选停车场</text>
+      </view>
+      <view class="rule-item">
+        <text class="rule-value">{{product.maxBindVehicleCount}}</text>
+        <text class="rule-label">绑定车牌</text>
+      </view>
+    </view>
+
+    <view class="lot-section">
+      <view class="section-header">
+        <text class="section-title">适用停车场</text>
+        <text class="section-count">{{selectedLotIds.length}}/{{maxSelectLotCount}}</text>
+      </view>
+
+      <view
+        wx:for="{{parkingLots}}"
+        wx:key="id"
+        class="lot-card {{item.checked ? 'checked' : ''}}"
+        data-id="{{item.id}}"
+        bindtap="toggleLot"
+      >
+        <view class="check-dot">{{item.checked ? '✓' : ''}}</view>
+        <view class="lot-main">
+          <text class="lot-name">{{item.name}}</text>
+          <text class="lot-location">{{item.location}}</text>
+          <text class="lot-meta">{{item.totalSpots}}个车位 · {{item.priceText}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="bottom-bar">
+      <button class="confirm-btn" loading="{{submitting}}" bindtap="confirmPackage">
+        {{product.owned ? '使用该权益' : '选择套餐'}}
+      </button>
+    </view>
+  </block>
+</view>

@@ -1,0 +1,76 @@
+<view class="container">
+  <navbar title="预约管理" showBack="{{false}}" />
+
+  <view class="hero">
+    <view>
+      <view class="hero-title">可预约车位</view>
+      <view class="hero-subtitle">{{currentLocationText}}</view>
+    </view>
+    <view class="hero-count">
+      <text class="count-number">{{reservableCount}}</text>
+      <text class="count-label">可约</text>
+    </view>
+  </view>
+
+  <view class="search-card">
+    <view class="search-row">
+      <image class="search-icon" src="https://cdn-icons-png.flaticon.com/128/751/751463.png" mode="aspectFit"></image>
+      <input
+        class="search-input"
+        placeholder="搜索停车场名称、地址或车位编号"
+        bindinput="onSearchInput"
+        bindconfirm="onSearch"
+        value="{{keyword}}"
+      />
+      <text class="clear-btn" wx:if="{{keyword}}" bindtap="clearSearch">×</text>
+    </view>
+  </view>
+
+  <view class="summary-row">
+    <view class="summary-item primary">
+      <text class="summary-value">{{packageCount}}</text>
+      <text class="summary-label">套餐优先</text>
+    </view>
+    <view class="summary-item">
+      <text class="summary-value">{{searchResult.length}}</text>
+      <text class="summary-label">当前结果</text>
+    </view>
+  </view>
+
+  <view class="filter-bar">
+    <view class="filter-item {{sortType === 'smart' ? 'active' : ''}}" data-type="smart" bindtap="toggleSort">推荐</view>
+    <view class="filter-item {{sortType === 'price' ? 'active' : ''}}" data-type="price" bindtap="toggleSort">价格最低</view>
+    <view class="filter-item {{sortType === 'available' ? 'active' : ''}}" data-type="available" bindtap="toggleSort">余位最多</view>
+  </view>
+
+  <view class="result-list">
+    <view class="loading" wx:if="{{loading}}">正在加载可预约车位...</view>
+    <view
+      class="parking-card {{item.packagePreferred ? 'preferred' : ''}}"
+      wx:for="{{searchResult}}"
+      wx:key="id"
+      bindtap="goToDetail"
+      data-id="{{item.id}}"
+    >
+      <view class="card-main">
+        <view class="name-row">
+          <text class="parking-name">{{item.name}}</text>
+          <text class="tag preferred-tag" wx:if="{{item.packagePreferred}}">套餐优先</text>
+          <text class="tag ev-tag" wx:if="{{item.hasEV}}">充电</text>
+        </view>
+        <view class="address">{{item.address}}</view>
+        <view class="meta-row">
+          <text>{{item.distance}}</text>
+          <text>余位 {{item.available}}/{{item.total}}</text>
+          <text>¥{{item.price}}/时</text>
+        </view>
+      </view>
+      <view class="card-action" catchtap="reserveParking" data-id="{{item.id}}">预约</view>
+    </view>
+  </view>
+
+  <view class="empty" wx:if="{{showEmpty && !loading}}">
+    <image class="empty-icon" src="/images/empty.png"></image>
+    <text class="empty-text">暂无可预约车位</text>
+  </view>
+</view>

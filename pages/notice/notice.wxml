@@ -1,0 +1,38 @@
+<view class="container">
+  <navbar title="我的通知" />
+
+  <!-- 通知列表 -->
+  <view class="notice-list" wx:if="{{notices.length > 0}}">
+    <view 
+      class="notice-item {{item.read ? 'read' : ''}}" 
+      wx:for="{{notices}}" 
+      wx:key="id"
+      bindtap="onNoticeTap"
+      data-id="{{item.id}}"
+      data-index="{{index}}"
+    >
+      <view class="notice-icon-wrap {{item.type}}">
+        <text class="notice-icon-text">{{item.type === 'system' ? '!' : item.type === 'order' ? 'O' : '%'}}</text>
+      </view>
+      <view class="notice-content">
+        <view class="notice-header">
+          <text class="notice-title">{{item.title}}</text>
+          <text class="notice-time">{{item.time}}</text>
+        </view>
+        <view class="notice-desc">{{item.content}}</view>
+      </view>
+      <view class="unread-dot" wx:if="{{!item.read}}"></view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:else>
+    <image class="empty-icon" src="/images/empty.png" mode="aspectFit" />
+    <text class="empty-text">暂无通知</text>
+  </view>
+
+  <!-- 清空按钮 -->
+  <view class="bottom-bar" wx:if="{{notices.length > 0}}">
+    <view class="clear-btn" bindtap="clearAll">清空通知</view>
+  </view>
+</view>

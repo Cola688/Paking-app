@@ -1,0 +1,156 @@
+.container {
+  min-height: 100vh;
+  background: #f4f7fb;
+}
+
+.summary-panel {
+  margin: 24rpx 30rpx 0;
+  padding: 30rpx;
+  border-radius: 18rpx;
+  background: linear-gradient(135deg, #0034a6, #1677ff);
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 12rpx 30rpx rgba(0, 31, 128, 0.18);
+}
+
+.summary-title {
+  display: block;
+  font-size: 38rpx;
+  font-weight: 700;
+}
+
+.summary-desc {
+  display: block;
+  margin-top: 10rpx;
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.86);
+}
+
+.summary-badge {
+  padding: 10rpx 18rpx;
+  border-radius: 999rpx;
+  background: rgba(255, 255, 255, 0.16);
+  font-size: 24rpx;
+}
+
+.tabs {
+  margin: 24rpx 30rpx 0;
+  display: flex;
+  gap: 14rpx;
+}
+
+.tab {
+  flex: 1;
+  height: 64rpx;
+  line-height: 64rpx;
+  text-align: center;
+  border-radius: 999rpx;
+  background: #fff;
+  color: #64748b;
+  font-size: 26rpx;
+}
+
+.tab.active {
+  background: #001f80;
+  color: #fff;
+  font-weight: 600;
+}
+
+.product-list {
+  padding: 24rpx 30rpx 40rpx;
+}
+
+.loading,
+.empty {
+  padding: 80rpx 0;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 28rpx;
+}
+
+.product-card {
+  margin-bottom: 22rpx;
+  padding: 28rpx;
+  border-radius: 16rpx;
+  background: #fff;
+  display: flex;
+  justify-content: space-between;
+  gap: 22rpx;
+  box-shadow: 0 8rpx 22rpx rgba(15, 23, 42, 0.06);
+  border: 2rpx solid transparent;
+}
+
+.product-card.owned {
+  border-color: rgba(22, 119, 255, 0.28);
+}
+
+.card-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.card-top {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.product-name {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #111827;
+}
+
+.owned-tag {
+  padding: 4rpx 12rpx;
+  border-radius: 999rpx;
+  background: #e8f3ff;
+  color: #1677ff;
+  font-size: 22rpx;
+}
+
+.tag-row {
+  margin-top: 14rpx;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rpx;
+}
+
+.tag {
+  padding: 6rpx 12rpx;
+  border-radius: 8rpx;
+  background: #eef4ff;
+  color: #001f80;
+  font-size: 22rpx;
+}
+
+.product-desc,
+.lot-desc {
+  display: block;
+  margin-top: 14rpx;
+  color: #64748b;
+  font-size: 24rpx;
+  line-height: 1.5;
+}
+
+.price-side {
+  width: 160rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.price {
+  color: #f97316;
+  font-size: 30rpx;
+  font-weight: 700;
+}
+
+.arrow {
+  margin-top: 12rpx;
+  color: #94a3b8;
+  font-size: 44rpx;
+}

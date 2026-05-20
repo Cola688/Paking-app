@@ -1,0 +1,91 @@
+<view class="container">
+  <navbar title="首页" showBack="{{false}}" />
+
+  <!-- 搜索栏区域 -->
+  <view class="search-area">
+    <view class="search-bar" bindtap="goToSearch">
+      <image src="https://cdn-icons-png.flaticon.com/128/751/751463.png" mode="aspectFit" class="search-icon"></image>
+      <text class="search-placeholder">搜索停车场</text>
+    </view>
+    <view class="notice-btn" bindtap="goToNotice">
+      <image src="/images/notice-icon.png" mode="aspectFit" class="notice-icon"></image>
+      <view class="notice-badge" wx:if="{{unreadCount > 0}}">{{unreadCount > 99 ? '99+' : unreadCount}}</view>
+    </view>
+  </view>
+
+  <!-- 地图区域 -->
+  <map
+    id="parkingMap"
+    class="map"
+    latitude="{{latitude}}"
+    longitude="{{longitude}}"
+    scale="{{mapScale}}"
+    markers="{{markers}}"
+    bindmarkertap="onMarkerTap"
+    show-location
+  ></map>
+
+  <view class="location-bar">
+    <view class="location-dot"></view>
+    <text class="location-text">{{currentAddress || (locationReady ? '已定位当前位置' : '定位中')}}</text>
+  </view>
+
+  <view class="map-entry" bindtap="goToParkingMap">
+    <view class="map-entry-main">
+      <text class="map-entry-title">查看高清停车分布图</text>
+      <text class="map-entry-desc">支持放大、拖拽、点位详情和导航</text>
+    </view>
+    <text class="map-entry-arrow">›</text>
+  </view>
+
+  <view class="package-entry" bindtap="goToPackage">
+    <view class="package-entry-main">
+      <text class="package-entry-title">停车套餐</text>
+      <text class="package-entry-desc">月租、预约、错峰权益统一管理</text>
+    </view>
+    <text class="package-entry-arrow">›</text>
+  </view>
+
+  <!-- 附近停车场列表 -->
+  <view class="nearby-section">
+    <view class="section-header">
+      <text class="section-title">附近停车场</text>
+    </view>
+    <view class="parking-list">
+      <view class="parking-loading" wx:if="{{loadingParks}}">停车点位加载中...</view>
+      <view class="parking-empty" wx:elif="{{nearbyParks.length === 0}}">暂无停车点位</view>
+      <block wx:for="{{nearbyParks}}" wx:key="id">
+        <view class="parking-card" bindtap="goToParkingDetail" data-id="{{item.id}}">
+          <!-- 上半部分：名称、状态、地址、图片 -->
+          <view class="card-header">
+            <view class="info-main">
+              <view class="name-row">
+                <view class="status-tag {{item.status === '空闲' ? 'available' : 'busy'}}">
+                  {{item.status}}
+                </view>
+                <text class="parking-name">{{item.name}}</text>
+              </view>
+              <view class="address-row">
+                <image class="location-icon" src="https://cdn-icons-png.flaticon.com/128/684/684908.png" />
+                <text class="address-text">{{item.address}} | 距您{{item.distance}}</text>
+              </view>
+            </view>
+            <image class="parking-img" src="{{item.imgUrl}}" mode="aspectFill" />
+          </view>
+
+          <!-- 分割线 -->
+          <view class="divider"></view>
+
+          <!-- 下半部分：价格、空闲车位、按钮 -->
+          <view class="card-footer">
+            <view class="detail-info">
+              <text class="price">¥{{item.price}} /小时</text>
+              <text class="space-count">空闲车位: {{item.available}}/{{item.total}}</text>
+            </view>
+            <view class="go-btn" catchtap="handleGoParking" data-id="{{item.id}}">导航到这</view>
+          </view>
+        </view>
+      </block>
+    </view>
+  </view>
+</view>

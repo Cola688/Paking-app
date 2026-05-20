@@ -1,0 +1,15 @@
+<view class="container">
+  <navbar title="关于我们" />
+
+  <view class="about-header">
+    <image class="logo" src="/images/logo.png"></image>
+    <view class="app-name">停车联盟</view>
+    <view class="version">版本 1.0.0</view>
+  </view>
+  <view class="about-content">
+    <view class="about-item">客服电话：400-xxx-xxxx</view>
+    <view class="about-item">邮箱：service@parking.com</view>
+    <view class="about-item">地址：上海市静安区共和新路</view>
+  </view>
+  <view class="copyright">© 2024 停车联盟 版权所有</view>
+</view>

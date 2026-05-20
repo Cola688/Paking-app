@@ -1,0 +1,48 @@
+<view class="container">
+  <navbar title="登录/注册" showBack="{{false}}" />
+
+  <view class="content">
+    <view class="header-section">
+      <image class="header-img" src="/images/logo.png" mode="aspectFit"></image>
+      <text class="welcome-text">欢迎回来</text>
+      <text class="desc-text">共和新路街道停车联盟</text>
+    </view>
+
+    <button class="wechat-btn" bindtap="handleWechatLogin" loading="{{loading}}">
+      <image src="/images/user.png" class="wechat-icon" mode="aspectFit"></image>
+      <text>微信一键登录</text>
+    </button>
+
+    <text class="divider-text">或使用账号密码登录</text>
+
+    <view class="form-section">
+      <input class="input-item" placeholder="请输入账号" value="{{username}}" bindinput="onUsernameInput" />
+      <view class="password-wrap">
+        <input class="input-item password-input" placeholder="请输入密码" password value="{{password}}" bindinput="onPasswordInput" />
+        <text class="forget-pwd" bindtap="onForgetPwd">忘记密码?</text>
+      </view>
+      <button class="login-btn" bindtap="handleAccountLogin" loading="{{loading}}">登录</button>
+    </view>
+
+    <view class="register-tip">
+      <text>还没有账号？</text>
+      <text class="register-link" bindtap="goRegister">立即注册</text>
+    </view>
+
+    <view class="protocol-section">
+      <checkbox-group bindchange="onAgreeChange">
+        <label class="protocol-label">
+          <checkbox value="agree" checked="{{agreeProtocol}}" color="#001f80" />
+          <text class="protocol-text">我已阅读并同意</text>
+        </label>
+      </checkbox-group>
+      <text class="protocol-link" bindtap="goProtocol">《用户服务协议》</text>
+      <text class="protocol-text">和</text>
+      <text class="protocol-link" bindtap="goProtocol">《隐私政策》</text>
+    </view>
+  </view>
+
+  <view class="copyright">
+    Copyright © 2025 共和新路街道停车联盟
+  </view>
+</view>

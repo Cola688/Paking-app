@@ -1,0 +1,25 @@
+<view class="nav-bar" style="padding-top: {{statusBarHeight}}px;">
+  <view class="nav-content" style="height: {{navContentHeight}}px;">
+    <view class="nav-left" style="width: {{sideWidth}}px;">
+      <block wx:if="{{showBack}}">
+        <view class="back-btn" bindtap="onBack">
+          <text class="back-icon">‹</text>
+          <text class="back-text" wx:if="{{showBackText}}">返回</text>
+        </view>
+      </block>
+    </view>
+
+    <view class="nav-title">
+      <text class="title-text {{titleColor === 'white' ? 'white' : ''}}">{{title}}</text>
+    </view>
+
+    <view class="nav-right" style="width: {{sideWidth}}px;">
+      <block wx:if="{{showHome}}">
+        <view class="home-btn" bindtap="onHome">
+          <text class="home-icon">⌂</text>
+        </view>
+      </block>
+      <slot name="right"></slot>
+    </view>
+  </view>
+</view>

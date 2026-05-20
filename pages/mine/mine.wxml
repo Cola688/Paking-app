@@ -1,0 +1,69 @@
+<view class="container">
+  <navbar title="个人中心" showBack="{{false}}" />
+
+  <view class="content">
+    <view class="profile-card" bindtap="login">
+      <image class="avatar" src="{{avatarUrl}}"></image>
+      <view class="profile-main">
+        <text class="nickname">{{displayName}}</text>
+        <text class="user-level">{{userLevel}}</text>
+      </view>
+    </view>
+
+    <view class="section-card">
+      <view class="section-title">个人信息</view>
+      <view class="info-row">
+        <text class="info-label">姓名</text>
+        <text class="info-value">{{displayName}}</text>
+      </view>
+      <view class="info-row">
+        <text class="info-label">手机号</text>
+        <text class="info-value">{{phoneMasked}}</text>
+      </view>
+      <view class="info-row">
+        <text class="info-label">联系地址</text>
+        <text class="info-value address">{{address}}</text>
+      </view>
+    </view>
+
+    <view class="section-card">
+      <view class="section-title">车辆管理</view>
+      <view class="vehicle-row" wx:for="{{vehicles}}" wx:key="id">
+        <view class="plate-box">{{item.plateNumber}}</view>
+        <view class="delete-btn" catchtap="deleteVehicle" data-id="{{item.id}}">删</view>
+      </view>
+      <view class="add-vehicle" bindtap="goToCar">
+        <text class="add-icon">＋</text>
+        <text>添加车辆</text>
+      </view>
+    </view>
+
+    <view class="section-card">
+      <view class="section-header">
+        <view class="section-title">共享申请</view>
+        <view class="primary-pill" bindtap="goToShareApply">发起申请</view>
+      </view>
+
+      <view class="share-row" wx:for="{{shareApplications}}" wx:key="id">
+        <view class="share-main">
+          <text class="share-name">{{item.title}}</text>
+          <text class="share-area">{{item.areaName}}</text>
+          <text class="share-date">{{item.date}}</text>
+        </view>
+        <text class="share-status {{item.status}}">{{item.statusText}}</text>
+      </view>
+      <view class="share-empty" wx:if="{{shareApplicationsLoaded && shareApplications.length === 0}}">
+        暂无共享申请记录
+      </view>
+    </view>
+
+    <view class="section-card invoice-card">
+      <view class="section-title">发票管理</view>
+      <view class="invoice-row" wx:for="{{invoices}}" wx:key="id">
+        <text class="invoice-title">{{item.title}}</text>
+        <text class="invoice-amount">¥{{item.amount}}</text>
+      </view>
+      <view class="invoice-button" bindtap="applyInvoice">开票申请</view>
+    </view>
+  </view>
+</view>

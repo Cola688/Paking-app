@@ -1,0 +1,226 @@
+.container {
+  min-height: 100vh;
+  background: #f5f7fb;
+  box-sizing: border-box;
+}
+
+.map-shell {
+  position: relative;
+  height: 760rpx;
+  margin: 20rpx 24rpx 0;
+  border-radius: 18rpx;
+  overflow: hidden;
+  background: #dfe8f5;
+  box-shadow: 0 12rpx 34rpx rgba(15, 35, 80, 0.16);
+}
+
+.map-area {
+  width: 100%;
+  height: 100%;
+}
+
+.map-view {
+  width: 1404rpx;
+  height: 993rpx;
+  position: relative;
+}
+
+.map-tile-layer {
+  width: 1404rpx;
+  height: 993rpx;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.map-tile {
+  position: absolute;
+  display: block;
+}
+
+.map-loading {
+  width: 1404rpx;
+  height: 993rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #667085;
+  font-size: 30rpx;
+  background: #eef3f8;
+}
+
+.map-marker {
+  position: absolute;
+  z-index: 8;
+  transform-origin: center bottom;
+}
+
+.pin {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50% 50% 50% 8rpx;
+  transform: rotate(-45deg);
+  box-shadow: 0 8rpx 22rpx rgba(0, 0, 0, 0.24);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 6rpx solid #fff;
+}
+
+.pin text {
+  transform: rotate(45deg);
+  color: #fff;
+  font-size: 22rpx;
+  font-weight: 700;
+}
+
+.map-marker.active .pin {
+  box-shadow: 0 0 0 10rpx rgba(0, 31, 128, 0.18), 0 10rpx 28rpx rgba(0, 0, 0, 0.28);
+}
+
+.marker-label {
+  position: absolute;
+  left: 50%;
+  top: 70rpx;
+  transform: translateX(-50%);
+  max-width: 240rpx;
+  padding: 8rpx 14rpx;
+  border-radius: 999rpx;
+  background: rgba(0, 0, 0, 0.76);
+  color: #fff;
+  font-size: 22rpx;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.map-tools {
+  position: absolute;
+  right: 20rpx;
+  top: 22rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 14rpx;
+  z-index: 20;
+}
+
+.tool-btn {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 18rpx;
+  background: rgba(255, 255, 255, 0.94);
+  color: #001f80;
+  font-size: 36rpx;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 20rpx rgba(15, 35, 80, 0.16);
+}
+
+.tool-btn.reset {
+  width: 92rpx;
+  font-size: 24rpx;
+}
+
+.selected-card {
+  margin: 24rpx;
+  padding: 28rpx;
+  border-radius: 18rpx;
+  background: #fff;
+  box-shadow: 0 8rpx 28rpx rgba(15, 35, 80, 0.08);
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 20rpx;
+}
+
+.park-name {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #1f2a44;
+}
+
+.park-address {
+  margin-top: 10rpx;
+  font-size: 25rpx;
+  color: #7b8498;
+}
+
+.status {
+  height: 44rpx;
+  line-height: 44rpx;
+  padding: 0 18rpx;
+  border-radius: 999rpx;
+  font-size: 24rpx;
+  flex-shrink: 0;
+}
+
+.status.available {
+  background: #e9f8ef;
+  color: #1a8f4c;
+}
+
+.status.busy {
+  background: #fff7e6;
+  color: #d48806;
+}
+
+.status.full {
+  background: #fff1f0;
+  color: #cf1322;
+}
+
+.stats {
+  display: flex;
+  margin-top: 28rpx;
+  padding: 22rpx 0;
+  border-top: 1rpx solid #eef1f6;
+  border-bottom: 1rpx solid #eef1f6;
+}
+
+.stat-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-value {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #001f80;
+}
+
+.stat-label {
+  margin-top: 8rpx;
+  font-size: 23rpx;
+  color: #8a94a6;
+}
+
+.actions {
+  display: flex;
+  gap: 20rpx;
+  margin-top: 24rpx;
+}
+
+.btn {
+  flex: 1;
+  height: 84rpx;
+  line-height: 84rpx;
+  border-radius: 42rpx;
+  font-size: 30rpx;
+  padding: 0;
+}
+
+.btn.outline {
+  color: #001f80;
+  background: #fff;
+  border: 2rpx solid #001f80;
+}
+
+.btn.primary {
+  color: #fff;
+  background: #001f80;
+}

@@ -1,0 +1,19 @@
+<view class="container">
+  <navbar title="停车记录" />
+
+  <view class="record-list">
+    <view class="record-item" wx:for="{{records}}" wx:key="id">
+      <view class="record-left">
+        <view class="record-name">{{item.parkingName}}</view>
+        <view class="record-time">{{item.time}}</view>
+      </view>
+      <view class="record-right">
+        <view class="record-fee">¥{{item.fee}}</view>
+        <view class="record-status {{item.status}}">{{item.statusText}}</view>
+      </view>
+    </view>
+  </view>
+  <view class="empty" wx:if="{{records.length === 0}}">
+    <text>暂无停车记录</text>
+  </view>
+</view>

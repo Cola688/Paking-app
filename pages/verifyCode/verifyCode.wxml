@@ -1,0 +1,65 @@
+<view class="container">
+  <!-- 顶部导航栏 -->
+  <view class="nav-bar">
+    <view class="nav-icon" bindtap="goBack">
+      <image src="/images/back-icon.png" mode="aspectFit"></image>
+    </view>
+    <text class="nav-title">验证码</text>
+    <view class="nav-placeholder"></view>
+  </view>
+
+  <!-- 主体内容 -->
+  <view class="content">
+    <view class="header-section">
+      <text class="desc-text">验证码已发送至</text>
+      <text class="phone-text">{{phone}}</text>
+    </view>
+
+    <!-- 验证码输入 -->
+    <view class="code-section">
+      <view class="code-input-wrap">
+        <input 
+          class="code-input-item {{codeFocus[0] ? 'active' : ''}}" 
+          type="number" 
+          maxlength="1" 
+          focus="{{codeFocus[0]}}"
+          value="{{codeArr[0]}}"
+          bindinput="onCodeInput" 
+          data-index="0"
+        />
+        <input 
+          class="code-input-item {{codeFocus[1] ? 'active' : ''}}" 
+          type="number" 
+          maxlength="1" 
+          focus="{{codeFocus[1]}}"
+          value="{{codeArr[1]}}"
+          bindinput="onCodeInput" 
+          data-index="1"
+        />
+        <input 
+          class="code-input-item {{codeFocus[2] ? 'active' : ''}}" 
+          type="number" 
+          maxlength="1" 
+          focus="{{codeFocus[2]}}"
+          value="{{codeArr[2]}}"
+          bindinput="onCodeInput" 
+          data-index="2"
+        />
+        <input 
+          class="code-input-item {{codeFocus[3] ? 'active' : ''}}" 
+          type="number" 
+          maxlength="1" 
+          focus="{{codeFocus[3]}}"
+          value="{{codeArr[3]}}"
+          bindinput="onCodeInput" 
+          data-index="3"
+        />
+      </view>
+      
+      <view class="resend-wrap">
+        <text class="resend-text" wx:if="{{countdown > 0}}">{{countdown}}秒后可重新获取</text>
+        <text class="resend-btn {{countdown > 0 ? 'disabled' : ''}}" wx:else bindtap="getCode">重新获取验证码</text>
+      </view>
+    </view>
+  </view>
+</view>

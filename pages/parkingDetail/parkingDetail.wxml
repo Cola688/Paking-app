@@ -1,0 +1,90 @@
+<view class="container">
+  <navbar title="停车场详情" />
+
+  <view class="header">
+    <view class="parking-name">{{parkingInfo.name}}</view>
+    <view class="parking-address">{{parkingInfo.address}}</view>
+    <view class="parking-tags">
+      <text class="tag" wx:if="{{parkingInfo.hasDiscount}}">有优惠</text>
+      <text class="tag" wx:if="{{parkingInfo.is24Hour}}">24小时</text>
+      <text class="tag blue" wx:if="{{parkingInfo.hasEV}}">新能源</text>
+    </view>
+  </view>
+
+  <view class="info-card">
+    <view class="info-row">
+      <text class="info-label">总车位数</text>
+      <text class="info-value">{{parkingInfo.totalSpaces}}个</text>
+    </view>
+    <view class="info-row">
+      <text class="info-label">剩余车位</text>
+      <text class="info-value highlight">{{parkingInfo.available}}个</text>
+    </view>
+    <view class="info-row">
+      <text class="info-label">首小时价格</text>
+      <text class="info-value price">¥{{parkingInfo.firstHourPrice}}</text>
+    </view>
+    <view class="info-row">
+      <text class="info-label">超时价格</text>
+      <text class="info-value">¥{{parkingInfo.overTimePrice}}/小时</text>
+    </view>
+  </view>
+
+  <view class="package-card" wx:if="{{packageLoading || packageProducts.length > 0}}">
+    <view class="package-header">
+      <view>
+        <view class="package-title">该停车场可购套餐</view>
+        <view class="package-subtitle">购买后可在权益范围内选择停车场</view>
+      </view>
+      <view class="package-more" wx:if="{{packageProducts.length > 0}}" bindtap="goPackageList">全部</view>
+    </view>
+
+    <view class="package-loading" wx:if="{{packageLoading}}">套餐加载中...</view>
+    <block wx:else>
+      <view
+        wx:for="{{packageProducts}}"
+        wx:key="id"
+        class="package-product"
+        data-id="{{item.id}}"
+        bindtap="goPackageDetail"
+      >
+        <view class="package-product-main">
+          <view class="package-product-top">
+            <text class="package-product-name">{{item.productName}}</text>
+            <text class="package-owned" wx:if="{{item.owned}}">已拥有</text>
+          </view>
+          <view class="package-tags">
+            <text wx:for="{{item.tags}}" wx:key="*this" class="package-tag">{{item}}</text>
+          </view>
+          <text class="package-desc">{{item.description}}</text>
+        </view>
+        <view class="package-price-side">
+          <text class="package-price">{{item.displayPriceText}}</text>
+          <text class="package-arrow">›</text>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <view class="action-bar">
+    <button class="btn btn-outline" bindtap="openMap">导航到这</button>
+    <button class="btn btn-primary" bindtap="startParking">我要停车</button>
+  </view>
+
+  <view class="notice-card">
+    <view class="notice-title">停车须知</view>
+    <view class="notice-content">
+      <text>1. 请将车辆停放在规定车位内</text>
+      <text>2. 离场时请出示停车凭证</text>
+      <text>3. 如有疑问请联系客服</text>
+    </view>
+  </view>
+
+  <view class="map-card" bindtap="goParkingMap">
+    <view>
+      <view class="map-card-title">查看停车分布图</view>
+      <view class="map-card-desc">放大查看点位，支持导航到停车场</view>
+    </view>
+    <text class="map-card-arrow">›</text>
+  </view>
+</view>

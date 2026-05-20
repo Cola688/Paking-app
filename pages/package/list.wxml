@@ -1,0 +1,51 @@
+<view class="container">
+  <navbar title="停车套餐" />
+
+  <view class="summary-panel">
+    <view>
+      <text class="summary-title">套餐中心</text>
+      <text class="summary-desc">{{parkingName ? parkingName + '可用套餐' : '已生效权益 ' + passCount + ' 个'}}</text>
+    </view>
+    <view class="summary-badge">企业停车</view>
+  </view>
+
+  <view class="tabs">
+    <view
+      wx:for="{{tabs}}"
+      wx:key="value"
+      class="tab {{activeType === item.value ? 'active' : ''}}"
+      data-value="{{item.value}}"
+      bindtap="onTabTap"
+    >
+      {{item.label}}
+    </view>
+  </view>
+
+  <view class="product-list">
+    <view class="loading" wx:if="{{loading}}">加载中...</view>
+    <view class="empty" wx:elif="{{showEmpty}}">暂无可售套餐</view>
+    <view
+      wx:for="{{products}}"
+      wx:key="id"
+      class="product-card {{item.owned ? 'owned' : ''}}"
+      data-id="{{item.id}}"
+      bindtap="goDetail"
+    >
+      <view class="card-main">
+        <view class="card-top">
+          <text class="product-name">{{item.productName}}</text>
+          <text class="owned-tag" wx:if="{{item.owned}}">已拥有</text>
+        </view>
+        <view class="tag-row">
+          <text wx:for="{{item.tags}}" wx:key="*this" class="tag">{{item}}</text>
+        </view>
+        <text class="product-desc">{{item.description}}</text>
+        <text class="lot-desc">{{item.lotNames || '适用停车场待配置'}} · 共{{item.parkingLotCount}}个停车场</text>
+      </view>
+      <view class="price-side">
+        <text class="price">{{item.displayPriceText}}</text>
+        <text class="arrow">›</text>
+      </view>
+    </view>
+  </view>
+</view>

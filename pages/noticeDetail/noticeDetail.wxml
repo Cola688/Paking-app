@@ -1,0 +1,21 @@
+<view class="container">
+  <navbar title="通知详情" />
+
+  <view class="detail" wx:if="{{notice}}">
+    <view class="type-row">
+      <view class="type-dot {{notice.type}}"></view>
+      <text class="type-text">{{notice.type === 'order' ? '订单通知' : notice.type === 'promo' ? '优惠通知' : notice.type === 'parking' ? '停车通知' : notice.type === 'pass' ? '权益通知' : '系统通知'}}</text>
+    </view>
+
+    <view class="title">{{notice.title}}</view>
+    <view class="time">{{notice.time}}</view>
+    <view class="content">{{notice.content}}</view>
+
+    <view class="action-btn" wx:if="{{notice.actionUrl || notice.bizType}}" bindtap="goAction">查看相关内容</view>
+  </view>
+
+  <view class="empty-state" wx:else>
+    <image class="empty-icon" src="/images/empty.png" mode="aspectFit" />
+    <text class="empty-text">{{loading ? '加载中...' : '通知不存在或已失效'}}</text>
+  </view>
+</view>

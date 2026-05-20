@@ -1,0 +1,133 @@
+<view class="container">
+  <navbar title="个人中心-共享申请" />
+
+  <view class="notice-card">
+    <text class="notice-icon">ⓘ</text>
+    <text class="notice-text">共享车位每日08:00-24:00开放申请，仅针对园区或在本辖区就业人员，请按要求填写申请材料。</text>
+  </view>
+
+  <view class="form-section">
+    <view class="section-title">基本信息</view>
+
+    <view class="field">
+      <text class="field-label">申请人姓名</text>
+      <input class="input" placeholder="请输入您的真实姓名" value="{{form.applicantName}}" data-field="applicantName" bindinput="onInput" />
+    </view>
+
+    <view class="field">
+      <text class="field-label">手机号码</text>
+      <input class="input" type="number" maxlength="11" value="{{form.phone}}" data-field="phone" bindinput="onInput" />
+    </view>
+
+    <view class="field">
+      <text class="field-label">车牌号码</text>
+      <input class="input" placeholder="请输入您的车牌号" value="{{form.plateNumber}}" data-field="plateNumber" bindinput="onInput" />
+    </view>
+  </view>
+
+  <view class="form-section">
+    <view class="section-title">常住地址</view>
+    <picker mode="region" bindchange="onRegionChange">
+      <view class="region-grid">
+        <view class="region-cell">{{region[0] || '省份'}}</view>
+        <view class="region-cell">{{region[1] || '城市'}}</view>
+        <view class="region-cell">{{region[2] || '区县'}}</view>
+      </view>
+    </picker>
+  </view>
+
+  <view class="form-section">
+    <view class="section-title inline-title">
+      拟申请区域
+      <text class="title-hint">停车场分布图</text>
+    </view>
+    <view class="map-box">
+      <movable-area class="area-map-area">
+        <movable-view
+          class="area-map-view"
+          direction="all"
+          x="{{mapAreaX}}"
+          y="{{mapAreaY}}"
+          scale
+          scale-min="{{mapAreaScaleMin}}"
+          scale-max="{{mapAreaScaleMax}}"
+          scale-value="{{mapAreaScaleValue}}"
+          bindscale="onAreaMapScale"
+        >
+          <view class="area-map-loading" wx:if="{{!tileLoadedCount}}">地图加载中...</view>
+          <view class="area-map-tile-layer">
+            <block wx:for="{{areaMapTiles}}" wx:key="key">
+              <image
+                wx:if="{{item.url}}"
+                class="area-map-tile"
+                src="{{item.url}}"
+                mode="scaleToFill"
+                style="left: {{item.x}}rpx; top: {{item.y}}rpx; width: {{item.width}}rpx; height: {{item.height}}rpx;"
+              />
+            </block>
+          </view>
+          <block wx:for="{{mapAreas}}" wx:key="id">
+            <view
+              class="area-marker {{selectedAreaId === item.id ? 'active' : ''}}"
+              style="left: {{item.x}}rpx; top: {{item.y}}rpx; transform: translate(-50%, -100%) scale({{areaMarkerScale}});"
+              data-id="{{item.id}}"
+              catchtap="selectArea"
+            >
+              <view class="area-pin">{{item.shortName}}</view>
+              <view class="area-marker-label" wx:if="{{selectedAreaId === item.id}}">{{item.name}}</view>
+            </view>
+          </block>
+        </movable-view>
+        <view class="area-loading" wx:if="{{areasLoading}}">区域加载中...</view>
+        <view class="area-loading" wx:elif="{{!areasLoading && mapAreas.length === 0}}">暂无可选区域</view>
+      </movable-area>
+      <view class="selected-area-card" wx:if="{{selectedArea}}">
+        <view class="selected-area-main">
+          <text class="selected-area-name">{{selectedArea.name}}</text>
+          <text class="selected-area-address">{{selectedArea.address || '已选择停车分区'}}</text>
+        </view>
+        <text class="selected-area-status">{{selectedArea.statusText}}</text>
+      </view>
+      <scroll-view class="area-options-scroll" scroll-x>
+        <view class="area-options">
+          <view
+            class="area-option {{selectedAreaId === item.id ? 'active' : ''}}"
+            wx:for="{{mapAreas}}"
+            wx:key="id"
+            data-id="{{item.id}}"
+            catchtap="selectArea"
+          >
+            <text class="area-option-name">{{item.name}}</text>
+            <text class="area-option-code">{{item.areaCode}}</text>
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+
+  <view class="form-section">
+    <view class="section-title">证明材料</view>
+    <view class="upload-box" bindtap="chooseFile">
+      <view class="upload-icon">☁</view>
+      <text class="upload-title">{{files.length > 0 ? '已选择 ' + files.length + ' 个文件' : '请上传居住证明或就业证明'}}</text>
+      <text class="upload-desc">支持JPG、PNG格式，最大5MB</text>
+      <view class="upload-button">上传文件</view>
+    </view>
+    <view class="file-list" wx:if="{{files.length > 0}}">
+      <view class="file-item" wx:for="{{files}}" wx:key="path">
+        <text class="file-name">证明材料{{index + 1}}</text>
+        <text class="file-remove" data-index="{{index}}" catchtap="removeFile">删除</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="agreement-row" bindtap="toggleAgreement">
+    <view class="checkbox {{agreement ? 'checked' : ''}}">{{agreement ? '✓' : ''}}</view>
+    <text class="agreement-text">我已阅读并同意《共享停车位使用协议》和隐私条款</text>
+  </view>
+
+  <view class="bottom-bar">
+    <button class="bottom-btn cancel-btn" bindtap="cancel">取消</button>
+    <button class="bottom-btn submit-btn" loading="{{submitting}}" bindtap="submitApplication">提交申请</button>
+  </view>
+</view>

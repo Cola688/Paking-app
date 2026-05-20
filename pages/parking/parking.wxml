@@ -1,0 +1,37 @@
+<view class="container">
+  <navbar title="停车" />
+
+  <view class="status-card">
+    <view class="status-icon {{parking.status === 'parking' ? 'active' : ''}}">
+      <image src="/images/{{parking.status === 'parking' ? 'car-active' : 'car'}}.png"></image>
+    </view>
+    <view class="status-text">
+      <text class="status-label">{{parking.statusText}}</text>
+      <text class="status-time" wx:if="{{parking.status === 'parking'}}">已停 {{parking.duration}}</text>
+    </view>
+  </view>
+
+  <view class="info-card" wx:if="{{parking.status === 'parking'}}">
+    <view class="info-row">
+      <text class="label">车牌号</text>
+      <text class="value">{{parking.plateNumber}}</text>
+    </view>
+    <view class="info-row">
+      <text class="label">停车场</text>
+      <text class="value">{{parking.parkingName}}</text>
+    </view>
+    <view class="info-row">
+      <text class="label">入场时间</text>
+      <text class="value">{{parking.enterTime}}</text>
+    </view>
+    <view class="info-row">
+      <text class="label">当前费用</text>
+      <text class="value price">¥{{parking.fee}}</text>
+    </view>
+  </view>
+
+  <view class="action-bar">
+    <button class="btn btn-primary" bindtap="endParking" wx:if="{{parking.status === 'parking'}}">结束停车</button>
+    <button class="btn btn-outline" bindtap="addCar" wx:if="{{parking.status !== 'parking'}}">添加车辆</button>
+  </view>
+</view>

@@ -1,0 +1,29 @@
+<view class="container">
+  <navbar title="导航" />
+
+  <view class="map-section">
+    <map 
+      id="naviMap"
+      class="navi-map"
+      latitude="{{latitude}}"
+      longitude="{{longitude}}"
+      scale="16"
+      show-location
+      polyline="{{polyline}}"
+      markers="{{markers}}"
+    ></map>
+  </view>
+
+  <view class="destination-card">
+    <view class="dest-info">
+      <view class="dest-name">{{destination.name}}</view>
+      <view class="dest-address">{{destination.address}}</view>
+    </view>
+    <view class="dest-distance">{{destination.distance}}</view>
+  </view>
+
+  <view class="action-section">
+    <button class="action-btn" bindtap="startNavi">开始导航</button>
+    <button class="action-btn secondary" bindtap="chooseLocation">重新选点</button>
+  </view>
+</view>

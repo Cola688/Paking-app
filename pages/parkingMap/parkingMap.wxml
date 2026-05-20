@@ -1,0 +1,84 @@
+<view class="container">
+  <navbar title="停车场分布图" />
+
+  <view class="map-shell">
+    <movable-area class="map-area">
+      <movable-view
+        class="map-view"
+        direction="all"
+        x="{{mapX}}"
+        y="{{mapY}}"
+        scale
+        scale-min="{{scaleMin}}"
+        scale-max="{{scaleMax}}"
+        scale-value="{{scaleValue}}"
+        bindscale="onScale"
+      >
+        <view class="map-loading" wx:if="{{!tileLoadedCount}}">地图加载中...</view>
+        <view class="map-tile-layer">
+          <block wx:for="{{tiles}}" wx:key="key">
+            <image
+              wx:if="{{item.url}}"
+              class="map-tile"
+              src="{{item.url}}"
+              mode="scaleToFill"
+              data-key="{{item.key}}"
+              binderror="onTileError"
+              style="left: {{item.x}}rpx; top: {{item.y}}rpx; width: {{item.width}}rpx; height: {{item.height}}rpx;"
+            />
+          </block>
+        </view>
+
+        <block wx:for="{{markers}}" wx:key="id">
+          <view
+            class="map-marker {{selectedId === item.id ? 'active' : ''}}"
+            style="left: {{item.x}}rpx; top: {{item.y}}rpx; transform: translate(-50%, -100%) scale({{markerScale}});"
+            data-id="{{item.id}}"
+            catchtap="selectMarker"
+          >
+            <view class="pin" style="background: {{item.color}};">
+              <text>{{item.available}}</text>
+            </view>
+            <view class="marker-label">{{item.name}}</view>
+          </view>
+        </block>
+      </movable-view>
+    </movable-area>
+
+    <view class="map-tools">
+      <view class="tool-btn" bindtap="zoomIn">+</view>
+      <view class="tool-btn" bindtap="zoomOut">-</view>
+      <view class="tool-btn reset" bindtap="resetMap">重置</view>
+    </view>
+  </view>
+
+  <view class="selected-card" wx:if="{{selectedPark}}">
+    <view class="card-top">
+      <view>
+        <view class="park-name">{{selectedPark.name}}</view>
+        <view class="park-address">{{selectedPark.address}}</view>
+      </view>
+      <view class="status {{selectedPark.statusClass}}">{{selectedPark.statusText}}</view>
+    </view>
+
+    <view class="stats">
+      <view class="stat-item">
+        <text class="stat-value">{{selectedPark.available}}</text>
+        <text class="stat-label">剩余车位</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-value">{{selectedPark.total}}</text>
+        <text class="stat-label">总车位</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-value">¥{{selectedPark.price}}</text>
+        <text class="stat-label">每小时</text>
+      </view>
+    </view>
+
+    <view class="actions">
+      <button class="btn outline" bindtap="goDetail">查看详情</button>
+      <button class="btn primary" bindtap="openNavigation">导航过去</button>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "个人中心-共享申请",
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "navbar": "/components/navbar/navbar"
+  }
+}

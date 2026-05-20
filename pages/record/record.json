@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "停车记录",
+  "usingComponents": {
+    "navbar": "/components/navbar/navbar"
+  }
+}

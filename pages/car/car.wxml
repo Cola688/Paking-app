@@ -1,0 +1,14 @@
+<view class="container">
+  <navbar title="我的车辆" />
+
+  <view class="car-list">
+    <view class="car-item" wx:for="{{cars}}" wx:key="id">
+      <view class="car-info">
+        <view class="car-plate">{{item.plateNumber}}</view>
+        <view class="car-type">{{item.type}}</view>
+      </view>
+      <view class="car-action" catchtap="editCar" data-id="{{item.id}}">编辑</view>
+    </view>
+  </view>
+  <button class="add-btn" bindtap="addCar">添加车辆</button>
+</view>

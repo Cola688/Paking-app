@@ -1,0 +1,10 @@
+<view class="container">
+  <navbar title="帮助与反馈" />
+  <view class="help-item" wx:for="{{helps}}" wx:key="id">
+    <view class="help-q" bindtap="toggleHelp" data-id="{{item.id}}">
+      <text>{{item.question}}</text>
+      <text class="arrow {{item.open ? 'open' : ''}}">▼</text>
+    </view>
+    <view class="help-a" wx:if="{{item.open}}">{{item.answer}}</view>
+  </view>
+</view>

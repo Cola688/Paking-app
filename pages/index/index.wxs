@@ -1,0 +1,38 @@
+// WXS 手势处理模块 - 用于高性能手势事件处理
+const zoomSpeed = 0.1
+
+module.exports = {
+  // 计算缩放
+  calculateZoom: function(currentZoom, touchDistance, startDistance, startZoom, minZoom, maxZoom) {
+    const scale = touchDistance / startDistance
+    const newZoom = startZoom * scale
+    return Math.min(Math.max(newZoom, minZoom), maxZoom)
+  },
+
+  // 计算偏移
+  calculateOffset: function(offsetX, offsetY, deltaX, deltaY, zoom) {
+    return {
+      offsetX: offsetX - deltaX / zoom,
+      offsetY: offsetY + deltaY / zoom
+    }
+  },
+
+  // 世界坐标转屏幕坐标
+  worldToScreen: function(worldX, worldY, cameraX, cameraY, halfWidth, halfHeight, screenWidth, screenHeight) {
+    const screenX = ((worldX - cameraX + halfWidth) / (2 * halfWidth)) * screenWidth
+    const screenY = ((halfHeight - (worldY - cameraY)) / (2 * halfHeight)) * screenHeight
+    return { x: screenX, y: screenY }
+  },
+
+  // 计算相机可视范围
+  getViewBounds: function(zoom, aspectRatio) {
+    const halfHeight = 5 / zoom
+    const halfWidth = halfHeight * aspectRatio
+    return { halfWidth, halfHeight }
+  },
+
+  // 插值计算（用于平滑动画）
+  lerp: function(current, target, factor) {
+    return current + (target - current) * factor
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/login/login",
+    "pages/register/register",
+    "pages/forgetPassword/forgetPassword",
+    "pages/verifyCode/verifyCode",
+    "pages/parking/parking",
+    "pages/package/list",
+    "pages/package/detail",
+    "pages/search/search",
+    "pages/mine/mine",
+    "pages/shareApply/shareApply",
+    "pages/parkingDetail/parkingDetail",
+    "pages/parkingMap/parkingMap",
+    "pages/navi/navi",
+    "pages/notice/notice",
+    "pages/noticeDetail/noticeDetail"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#001f80",
+    "navigationBarTitleText": "停车联盟",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#ffffff",
+    "backgroundTextStyle": "dark"
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "用于展示当前位置并推荐附近停车场"
+    }
+  },
+  "requiredPrivateInfos": [
+    "getLocation",
+    "chooseLocation"
+  ],
+  "tabBar": {
+    "color": "#666666",
+    "selectedColor": "#001f80",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "images/home.png",
+        "selectedIconPath": "images/home-active.png"
+      },
+      {
+        "pagePath": "pages/search/search",
+        "text": "预约管理",
+        "iconPath": "images/search.png",
+        "selectedIconPath": "images/search-active.png"
+      },
+      {
+        "pagePath": "pages/mine/mine",
+        "text": "我的",
+        "iconPath": "images/user.png",
+        "selectedIconPath": "images/user-active.png"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

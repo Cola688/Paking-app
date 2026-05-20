@@ -1,0 +1,7 @@
+<view class="container">
+  <navbar title="我的收藏" />
+
+  <view class="empty">
+    <text>暂无收藏停车场</text>
+  </view>
+</view>

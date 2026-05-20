@@ -1,0 +1,10 @@
+.container { min-height: 100vh; background: #f5f5f5; padding: calc(20rpx + 88rpx) 30rpx 20rpx; }
+.record-list { display: flex; flex-direction: column; gap: 20rpx; }
+.record-item { background: #fff; padding: 30rpx; border-radius: 12rpx; display: flex; justify-content: space-between; }
+.record-name { font-size: 30rpx; font-weight: bold; color: #333; margin-bottom: 8rpx; }
+.record-time { font-size: 24rpx; color: #999; }
+.record-fee { font-size: 32rpx; color: #ff6b35; font-weight: bold; text-align: right; margin-bottom: 8rpx; }
+.record-status { font-size: 24rpx; text-align: right; }
+.record-status.completed { color: #52c41a; }
+.record-status.unpaid { color: #ff4d4f; }
+.empty { text-align: center; padding: 100rpx; color: #999; }

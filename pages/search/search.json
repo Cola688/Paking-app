@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "navbar": "/components/navbar/navbar"
+  },
+  "navigationStyle": "custom",
+  "navigationBarTitleText": "预约管理"
+}

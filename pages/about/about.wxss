@@ -1,0 +1,9 @@
+.container { min-height: 100vh; background: #f5f5f5; padding: calc(60rpx + 88rpx) 40rpx 60rpx; text-align: center; }
+.about-header { margin-bottom: 60rpx; }
+.logo { width: 160rpx; height: 160rpx; background: #1989fa; border-radius: 32rpx; margin-bottom: 30rpx; }
+.app-name { font-size: 40rpx; font-weight: bold; color: #333; margin-bottom: 12rpx; }
+.version { font-size: 24rpx; color: #999; }
+.about-content { background: #fff; border-radius: 16rpx; padding: 40rpx; margin-bottom: 60rpx; }
+.about-item { padding: 24rpx 0; font-size: 28rpx; color: #666; border-bottom: 1rpx solid #f0f0f0; }
+.about-item:last-child { border-bottom: none; }
+.copyright { font-size: 24rpx; color: #999; }

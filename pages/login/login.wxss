@@ -1,0 +1,170 @@
+page {
+  background-color: #f5f5f5;
+  height: 100vh;
+}
+
+.container {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 主体内容 */
+.content {
+  flex: 1;
+  padding: 40rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.header-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 50rpx;
+}
+
+.header-img {
+  width: 180rpx;
+  height: 180rpx;
+  margin-bottom: 30rpx;
+}
+
+.welcome-text {
+  width: 100%;
+  font-size: 38rpx;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 15rpx;
+}
+
+.desc-text {
+  width: 100%;
+  font-size: 28rpx;
+  color: #666;
+  text-align: center;
+  margin-bottom: 50rpx;
+}
+
+/* 微信登录按钮 */
+.wechat-btn {
+  width: 100%;
+  background-color: #001f80;
+  color: #fff;
+  border-radius: 12rpx;
+  height: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  margin-bottom: 30rpx;
+  border: none;
+}
+
+.wechat-icon {
+  width: 36rpx;
+  height: 36rpx;
+  margin-right: 15rpx;
+}
+
+.divider-text {
+  font-size: 28rpx;
+  color: #999;
+  margin-bottom: 40rpx;
+}
+
+/* 表单部分 */
+.form-section {
+  width: 100%;
+}
+
+.input-item {
+  width: 100%;
+  height: 88rpx;
+  border: 1rpx solid #eee;
+  border-radius: 12rpx;
+  padding: 0 20rpx;
+  font-size: 30rpx;
+  margin-bottom: 30rpx;
+  box-sizing: border-box;
+  background-color: #fafafa;
+}
+
+.password-wrap {
+  position: relative;
+  margin-bottom: 30rpx;
+}
+
+.password-input {
+  padding-right: 160rpx;
+}
+
+.forget-pwd {
+  position: absolute;
+  right: 20rpx;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 26rpx;
+  color: #0066cc;
+  z-index: 1;
+}
+
+.login-btn {
+  width: 100%;
+  background-color: #001f80;
+  color: #fff;
+  border-radius: 12rpx;
+  height: 88rpx;
+  font-size: 32rpx;
+  margin-bottom: 30rpx;
+  border: none;
+}
+
+/* 注册入口 */
+.register-tip {
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 60rpx;
+}
+
+.register-link {
+  color: #0066cc;
+  margin-left: 10rpx;
+}
+
+/* 协议勾选 */
+.protocol-section {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  font-size: 24rpx;
+  width: 100%;
+}
+
+.protocol-label {
+  display: flex;
+  align-items: center;
+}
+
+.protocol-text {
+  color: #666;
+  margin-left: 8rpx;
+}
+
+.protocol-link {
+  color: #0066cc;
+  margin: 0 5rpx;
+}
+
+/* 底部版权 */
+.copyright {
+  font-size: 24rpx;
+  color: #999;
+  text-align: center;
+  padding: 30rpx 0;
+}
