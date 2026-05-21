@@ -233,6 +233,10 @@ module.exports = {
     return request.get(`/parking/maps/points/${id}`);
   },
 
+  getParkingSharedAreas() {
+    return request.get('/parking/shared-areas');
+  },
+
   getParkingProducts(params = {}) {
     return request.get('/parking/products', params);
   },

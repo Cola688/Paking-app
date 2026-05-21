@@ -147,7 +147,7 @@ Page({
   async loadMapAreas() {
     this.setData({ areasLoading: true });
     try {
-      const res = await api.getParkingMapPoints();
+      const res = await api.getParkingSharedAreas();
       this.setData({
         areasLoading: false,
         mapAreas: this.buildMapAreas(res?.data || [])
@@ -161,35 +161,61 @@ Page({
     }
   },
 
-  buildMapAreas(points = []) {
-    return (Array.isArray(points) ? points : []).flatMap((item, index) => {
-      const mapPointX = this.toNumber(item.mapPointX);
-      const mapPointY = this.toNumber(item.mapPointY);
-      if (mapPointX === null || mapPointY === null || item.id === undefined || item.id === null) {
+  buildMapAreas(areas = []) {
+    return (Array.isArray(areas) ? areas : []).flatMap((item, index) => {
+      const center = this.resolveAreaCenter(item);
+      if (!center || item.id === undefined || item.id === null) {
         return [];
       }
 
-      const total = Math.max(this.toNumber(item.total) || 0, 0);
-      const available = Math.max(this.toNumber(item.available) || 0, 0);
-      const xRatio = this.clamp(mapPointX / MAP_WORLD_WIDTH);
-      const yRatio = this.clamp(mapPointY / MAP_WORLD_HEIGHT);
-      const name = item.name || item.parkingAreaName || item.spotCode || `共享区域${index + 1}`;
-      const areaCode = item.spotCode || `P${index + 1}`;
+      const total = Math.max(this.toNumber(item.totalSpotCount) || 0, 0);
+      const available = Math.max(this.toNumber(item.sharedSpotCount) || 0, 0);
+      const parkingLotCount = Math.max(this.toNumber(item.parkingLotCount) || 0, 0);
+      const xRatio = this.clamp(center.x / MAP_WORLD_WIDTH);
+      const yRatio = this.clamp(center.y / MAP_WORLD_HEIGHT);
+      const name = item.name || `共享区域${index + 1}`;
+      const areaCode = `区域${index + 1}`;
 
       return [{
-        address: item.address || item.locationDescription || item.remark || '',
+        address: parkingLotCount > 0 ? `包含${parkingLotCount}个停车场` : '暂未包含停车场',
         areaCode,
         available,
         id: String(item.id),
         name,
-        rawId: String(item.id),
+        rawId: '',
+        sharedAreaId: String(item.id),
         shortName: this.buildShortName(areaCode, index),
-        statusText: available > 0 ? `${available}个可用` : '暂无余量',
+        statusText: parkingLotCount > 0 ? `${parkingLotCount}个停车场` : '待完善',
         total,
         x: Math.round(xRatio * MAP_DISPLAY_WIDTH),
         y: Math.round(yRatio * MAP_DISPLAY_HEIGHT)
       }];
     });
+  },
+
+  resolveAreaCenter(area) {
+    const centerX = this.toNumber(area.centerX);
+    const centerY = this.toNumber(area.centerY);
+    if (centerX !== null && centerY !== null) {
+      return { x: centerX, y: centerY };
+    }
+
+    const points = Array.isArray(area.points) ? area.points : [];
+    const validPoints = points
+      .map(point => ({ x: this.toNumber(point.x), y: this.toNumber(point.y) }))
+      .filter(point => point.x !== null && point.y !== null);
+    if (validPoints.length === 0) {
+      return null;
+    }
+
+    const total = validPoints.reduce((ret, point) => ({
+      x: ret.x + point.x,
+      y: ret.y + point.y
+    }), { x: 0, y: 0 });
+    return {
+      x: total.x / validPoints.length,
+      y: total.y / validPoints.length
+    };
   },
 
   buildShortName(areaCode, index) {
@@ -332,7 +358,7 @@ Page({
       areaAddress: form.areaAddress || selectedArea.address || selectedArea.name || '',
       areaCode: selectedArea.areaCode || '',
       areaName: form.areaName,
-      mapPointId: selectedArea.rawId,
+      sharedAreaId: selectedArea.sharedAreaId,
       phone: form.phone.trim(),
       plateNumber: form.plateNumber.trim().toUpperCase(),
       proofFileNames: this.getProofFileNames(),
