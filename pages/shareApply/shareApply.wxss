@@ -1,7 +1,10 @@
-.container {
+.page {
   min-height: 100vh;
-  padding: 22rpx 24rpx 150rpx;
   background: #fff;
+}
+
+.container {
+  padding: 22rpx 24rpx 250rpx;
   box-sizing: border-box;
 }
 
@@ -382,8 +385,7 @@
   display: flex;
   align-items: flex-start;
   gap: 14rpx;
-  margin: 22rpx 0 0;
-  padding-bottom: 10rpx;
+  margin: 0;
 }
 
 .checkbox {
@@ -410,17 +412,25 @@
   line-height: 1.45;
 }
 
-.bottom-bar {
+.bottom-panel {
   position: fixed;
   left: 0;
   right: 0;
   bottom: 0;
-  display: flex;
-  gap: 22rpx;
+  z-index: 30;
   padding: 18rpx 30rpx calc(18rpx + env(safe-area-inset-bottom));
   background: #fff;
   box-shadow: 0 -8rpx 24rpx rgba(15, 23, 42, 0.08);
   box-sizing: border-box;
+}
+
+.bottom-panel .agreement-row {
+  padding: 0 4rpx 16rpx;
+}
+
+.bottom-bar {
+  display: flex;
+  gap: 22rpx;
 }
 
 .bottom-btn {
