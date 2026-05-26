@@ -185,7 +185,7 @@ Page({
       latitude,
       longitude,
       price: this.toNumber(item.price) || 0,
-      imgUrl: '/images/car.png'
+      imgUrl: item.imageUrl || '/images/car.png'
     }
   },
 

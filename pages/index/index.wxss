@@ -169,31 +169,38 @@
 /* 头部：名称+地址+图片 */
 .card-header {
   display: flex;
-  justify-content: space-between;
   align-items: flex-start;
+  gap: 12rpx;
 }
 
 .info-main {
   flex: 1;
-  margin-right: 20rpx;
+  min-width: 0;
 }
 
 .name-row {
   display: flex;
   align-items: center;
-  gap: 12rpx;
+  gap: 8rpx;
   margin-bottom: 16rpx;
-  min-width: 0;
 }
 
 .parking-name {
   flex: 1;
-  min-width: 0;
   font-size: 32rpx;
   font-weight: 600;
   color: #1a1a1a;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.distance-text {
+  flex-shrink: 0;
+  align-self: flex-start;
+  color: #245d9f;
+  font-size: 22rpx;
+  font-weight: 600;
   white-space: nowrap;
 }
 
@@ -232,22 +239,6 @@
   width: 28rpx;
   height: 28rpx;
   margin-right: 8rpx;
-}
-
-.distance-badge {
-  flex-shrink: 0;
-  margin-left: auto;
-  padding: 4rpx 14rpx;
-  border-radius: 999rpx;
-  background: #e8f2ff;
-  align-self: center;
-}
-
-.distance-text {
-  color: #245d9f;
-  font-size: 22rpx;
-  font-weight: 600;
-  white-space: nowrap;
 }
 
 .parking-img {

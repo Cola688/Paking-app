@@ -42,7 +42,8 @@ Page({
       hasEV: item.chargingPileSupported === true,
       lat: this.toNumber(item.latitude),
       lng: this.toNumber(item.longitude),
-      remark: item.remark || ''
+      remark: item.remark || '',
+      imageUrl: item.imageUrl || ''
     };
   },
 
