@@ -1,0 +1,108 @@
+<view class="container">
+  <navbar title="小新" showBack="{{false}}" />
+
+  <view class="hero">
+    <text class="hero-title">小新智能助手</text>
+    <text class="hero-subtitle">帮你处理找车位、导航和共享申请问题</text>
+  </view>
+
+  <scroll-view
+    class="chat-scroll"
+    scroll-y
+    scroll-with-animation
+    scroll-into-view="{{scrollIntoView}}"
+  >
+    <view class="message-list">
+      <view
+        wx:for="{{messages}}"
+        wx:key="id"
+        id="msg-{{item.id}}"
+        class="message-row {{item.role === 'user' ? 'user' : 'assistant'}}"
+      >
+        <view class="avatar">{{item.role === 'user' ? '我' : 'AI'}}</view>
+        <view class="bubble {{item.cards && item.cards.length ? 'has-cards' : ''}}">
+          <text wx:if="{{item.text}}" class="message-text">{{item.text}}</text>
+          <view wx:elif="{{item.streaming}}" class="typing">
+            <view class="typing-dot"></view>
+            <view class="typing-dot"></view>
+            <view class="typing-dot"></view>
+          </view>
+
+          <view wx:if="{{item.cards && item.cards.length}}" class="ai-card-list">
+            <view
+              wx:for="{{item.cards}}"
+              wx:for-item="card"
+              wx:key="key"
+              class="ai-card"
+            >
+              <view class="card-head">
+                <view class="card-type">{{card.typeLabel}}</view>
+                <view class="card-tags" wx:if="{{card.tags && card.tags.length}}">
+                  <text
+                    wx:for="{{card.tags}}"
+                    wx:for-item="tag"
+                    wx:key="*this"
+                    class="card-tag"
+                  >{{tag}}</text>
+                </view>
+              </view>
+              <view class="card-title">{{card.title}}</view>
+              <view class="card-subtitle" wx:if="{{card.subtitle}}">{{card.subtitle}}</view>
+              <view class="card-metas" wx:if="{{card.rows && card.rows.length}}">
+                <view
+                  wx:for="{{card.rows}}"
+                  wx:for-item="row"
+                  wx:key="label"
+                  class="card-meta-row"
+                >
+                  <text class="card-meta-label">{{row.label}}</text>
+                  <text class="card-meta-value">{{row.value}}</text>
+                </view>
+              </view>
+              <view class="card-actions" wx:if="{{card.actionUrl || card.navEnabled}}">
+                <view
+                  class="card-action"
+                  wx:if="{{card.actionUrl}}"
+                  data-url="{{card.actionUrl}}"
+                  catchtap="onCardAction"
+                >{{card.actionText}}</view>
+                <view
+                  class="card-action card-action-nav"
+                  wx:if="{{card.navEnabled}}"
+                  data-latitude="{{card.navLatitude}}"
+                  data-longitude="{{card.navLongitude}}"
+                  data-name="{{card.navName}}"
+                  catchtap="onCardNavigate"
+                >导航去这里</view>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view class="quick-panel">
+        <view
+          wx:for="{{quickPrompts}}"
+          wx:key="*this"
+          class="quick-chip"
+          data-text="{{item}}"
+          bindtap="onQuickPrompt"
+        >
+          {{item}}
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <view class="input-bar">
+    <input
+      class="chat-input"
+      confirm-type="send"
+      placeholder="问问停车相关问题"
+      value="{{inputValue}}"
+      bindconfirm="onSend"
+      bindinput="onInput"
+    />
+    <button class="send-btn" loading="{{loading}}" bindtap="onSend">发送</button>
+  </view>
+</view>

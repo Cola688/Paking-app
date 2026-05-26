@@ -288,11 +288,5 @@ Page({
     wx.navigateTo({
       url: '/pages/parkingMap/parkingMap'
     })
-  },
-
-  goToPackage() {
-    wx.navigateTo({
-      url: '/pages/package/list'
-    })
   }
 })

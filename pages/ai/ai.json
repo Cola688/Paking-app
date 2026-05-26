@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "停车套餐",
+  "navigationBarTitleText": "AI",
   "navigationStyle": "custom",
   "usingComponents": {
     "navbar": "/components/navbar/navbar"

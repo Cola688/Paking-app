@@ -2,9 +2,7 @@ const api = require('../../utils/api.js');
 
 Page({
   data: {
-    parkingInfo: {},
-    packageLoading: false,
-    packageProducts: []
+    parkingInfo: {}
   },
 
   onLoad(options) {
@@ -21,7 +19,6 @@ Page({
       const res = await api.getParkingMapPointDetail(id);
       const parkingInfo = this.normalizeParkingInfo(res?.data || {});
       this.setData({ parkingInfo });
-      this.loadPackageProducts(parkingInfo.parkingLotId);
     } catch (err) {
       console.error('加载停车点位详情失败:', err);
       wx.showToast({ title: '详情加载失败', icon: 'none' });
@@ -46,50 +43,6 @@ Page({
       lat: this.toNumber(item.latitude),
       lng: this.toNumber(item.longitude),
       remark: item.remark || ''
-    };
-  },
-
-  async loadPackageProducts(parkingLotId) {
-    if (!parkingLotId) {
-      this.setData({ packageProducts: [], packageLoading: false });
-      return;
-    }
-
-    this.setData({ packageLoading: true });
-    try {
-      const res = await api.getParkingProducts({
-        pageNum: 1,
-        pageSize: 3,
-        parkingLotId
-      });
-      const records = res?.data?.records || [];
-      this.setData({
-        packageProducts: records.map(item => this.normalizePackageProduct(item))
-      });
-    } catch (err) {
-      console.error('加载停车场套餐失败:', err);
-      this.setData({ packageProducts: [] });
-    } finally {
-      this.setData({ packageLoading: false });
-    }
-  },
-
-  normalizePackageProduct(item) {
-    const quota = item.quotaRule || {};
-    const tags = [
-      item.productTypeName || '停车套餐',
-      item.durationDays ? `${item.durationDays}天` : '',
-      quota.maxSelectLotCount ? `可选${quota.maxSelectLotCount}场` : '',
-      quota.reservationRequired === 1 ? '需预约' : ''
-    ].filter(Boolean);
-
-    return {
-      id: String(item.id),
-      description: item.description || '适用于当前停车场',
-      displayPriceText: item.displayPriceText || '价格待定',
-      owned: item.owned === true,
-      productName: item.productName || '停车套餐',
-      tags
     };
   },
 
@@ -124,18 +77,6 @@ Page({
 
   startParking() {
     wx.navigateTo({ url: '/pages/parking/parking' });
-  },
-
-  goPackageDetail(e) {
-    const id = e.currentTarget.dataset.id;
-    const parkingLotId = this.data.parkingInfo.parkingLotId || '';
-    wx.navigateTo({ url: `/pages/package/detail?id=${id}&parkingLotId=${parkingLotId}` });
-  },
-
-  goPackageList() {
-    const parkingLotId = this.data.parkingInfo.parkingLotId || '';
-    const parkingName = encodeURIComponent(this.data.parkingInfo.name || '');
-    wx.navigateTo({ url: `/pages/package/list?parkingLotId=${parkingLotId}&parkingName=${parkingName}` });
   },
 
   goParkingMap() {

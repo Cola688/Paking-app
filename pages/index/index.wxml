@@ -38,14 +38,6 @@
     <text class="map-entry-arrow">›</text>
   </view>
 
-  <view class="package-entry" bindtap="goToPackage">
-    <view class="package-entry-main">
-      <text class="package-entry-title">停车套餐</text>
-      <text class="package-entry-desc">月租、预约、错峰权益统一管理</text>
-    </view>
-    <text class="package-entry-arrow">›</text>
-  </view>
-
   <!-- 附近停车场列表 -->
   <view class="nearby-section">
     <view class="section-header">
@@ -64,10 +56,13 @@
                   {{item.status}}
                 </view>
                 <text class="parking-name">{{item.name}}</text>
+                <view class="distance-badge" wx:if="{{item.distance !== '未知'}}">
+                  <text class="distance-text">距您{{item.distance}}</text>
+                </view>
               </view>
               <view class="address-row">
                 <image class="location-icon" src="https://cdn-icons-png.flaticon.com/128/684/684908.png" />
-                <text class="address-text">{{item.address}} | 距您{{item.distance}}</text>
+                <text class="address-text">{{item.address}}</text>
               </view>
             </view>
             <image class="parking-img" src="{{item.imgUrl}}" mode="aspectFill" />

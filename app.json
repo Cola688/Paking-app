@@ -6,8 +6,7 @@
     "pages/forgetPassword/forgetPassword",
     "pages/verifyCode/verifyCode",
     "pages/parking/parking",
-    "pages/package/list",
-    "pages/package/detail",
+    "pages/ai/ai",
     "pages/search/search",
     "pages/mine/mine",
     "pages/shareApply/shareApply",
@@ -46,8 +45,8 @@
         "selectedIconPath": "images/home-active.png"
       },
       {
-        "pagePath": "pages/search/search",
-        "text": "预约管理",
+        "pagePath": "pages/ai/ai",
+        "text": "小新",
         "iconPath": "images/search.png",
         "selectedIconPath": "images/search-active.png"
       },

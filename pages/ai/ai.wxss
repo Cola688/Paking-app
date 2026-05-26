@@ -1,0 +1,278 @@
+.container {
+  min-height: 100vh;
+  background: #f5f9ff;
+  box-sizing: border-box;
+}
+
+.hero {
+  margin: 22rpx 28rpx 0;
+  padding: 26rpx 28rpx;
+  border: 1rpx solid #e5edf7;
+  border-radius: 18rpx;
+  background: #fff;
+  box-shadow: 0 8rpx 22rpx rgba(15, 23, 42, 0.06);
+  box-sizing: border-box;
+}
+
+.hero-title,
+.hero-subtitle {
+  display: block;
+}
+
+.hero-title {
+  color: #17385f;
+  font-size: 34rpx;
+  font-weight: 800;
+}
+
+.hero-subtitle {
+  margin-top: 8rpx;
+  color: #64748b;
+  font-size: 25rpx;
+}
+
+.chat-scroll {
+  height: calc(100vh - 360rpx);
+  box-sizing: border-box;
+}
+
+.message-list {
+  padding: 24rpx 28rpx 180rpx;
+  box-sizing: border-box;
+}
+
+.message-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 16rpx;
+  margin-bottom: 28rpx;
+}
+
+.message-row.user {
+  flex-direction: row-reverse;
+}
+
+.avatar {
+  flex-shrink: 0;
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 12rpx;
+  background: #001f80;
+  color: #fff;
+  font-size: 22rpx;
+  font-weight: 700;
+  line-height: 56rpx;
+  text-align: center;
+}
+
+.message-row.user .avatar {
+  background: #16a05d;
+}
+
+.bubble {
+  max-width: 548rpx;
+  padding: 20rpx 24rpx;
+  border-radius: 16rpx;
+  background: #fff;
+  box-shadow: 0 8rpx 24rpx rgba(15, 23, 42, 0.06);
+  color: #1f2937;
+  font-size: 28rpx;
+  line-height: 1.55;
+  word-break: break-all;
+  box-sizing: border-box;
+}
+
+.bubble.has-cards {
+  width: 548rpx;
+}
+
+.message-row.user .bubble {
+  background: #245d9f;
+  color: #fff;
+}
+
+.message-text {
+  white-space: pre-wrap;
+}
+
+.typing {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  min-width: 110rpx;
+  min-height: 62rpx;
+}
+
+.typing-dot {
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 50%;
+  background: #94a3b8;
+}
+
+.ai-card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14rpx;
+  margin-top: 18rpx;
+}
+
+.ai-card {
+  padding: 18rpx;
+  border: 1rpx solid #e1e9f5;
+  border-radius: 14rpx;
+  background: #f8fbff;
+  box-sizing: border-box;
+}
+
+.card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12rpx;
+}
+
+.card-type {
+  flex-shrink: 0;
+  color: #245d9f;
+  font-size: 22rpx;
+  font-weight: 700;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8rpx;
+}
+
+.card-tag {
+  padding: 4rpx 10rpx;
+  border-radius: 999rpx;
+  background: #e8f2ff;
+  color: #245d9f;
+  font-size: 20rpx;
+  line-height: 1.4;
+}
+
+.card-title {
+  margin-top: 10rpx;
+  color: #172033;
+  font-size: 29rpx;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.card-subtitle {
+  margin-top: 6rpx;
+  color: #64748b;
+  font-size: 23rpx;
+  line-height: 1.45;
+}
+
+.card-metas {
+  margin-top: 14rpx;
+  border-top: 1rpx solid #e8eef7;
+}
+
+.card-meta-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 18rpx;
+  padding-top: 10rpx;
+  color: #334155;
+  font-size: 23rpx;
+  line-height: 1.4;
+}
+
+.card-meta-label {
+  flex-shrink: 0;
+  color: #7a8798;
+}
+
+.card-meta-value {
+  flex: 1;
+  text-align: right;
+  word-break: break-all;
+}
+
+.card-actions {
+  display: flex;
+  gap: 14rpx;
+  margin-top: 16rpx;
+}
+
+.card-action {
+  flex: 1;
+  height: 58rpx;
+  border-radius: 12rpx;
+  background: #001f80;
+  color: #fff;
+  font-size: 24rpx;
+  font-weight: 700;
+  line-height: 58rpx;
+  text-align: center;
+}
+
+.card-action-nav {
+  background: #16a05d;
+}
+
+.quick-panel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14rpx;
+  margin-top: 6rpx;
+  padding-left: 72rpx;
+}
+
+.quick-chip {
+  padding: 14rpx 20rpx;
+  border: 1rpx solid #d8e2f0;
+  border-radius: 999rpx;
+  background: #fff;
+  color: #245d9f;
+  font-size: 24rpx;
+  box-shadow: 0 6rpx 18rpx rgba(15, 23, 42, 0.04);
+}
+
+.input-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  gap: 16rpx;
+  padding: 12rpx 26rpx 10rpx;
+  background: #fff;
+  box-shadow: 0 -4rpx 16rpx rgba(15, 23, 42, 0.06);
+  box-sizing: border-box;
+}
+
+.chat-input {
+  flex: 1;
+  height: 74rpx;
+  padding: 0 24rpx;
+  border-radius: 18rpx;
+  background: #f4f7fb;
+  color: #1f2937;
+  font-size: 28rpx;
+  box-sizing: border-box;
+}
+
+.send-btn {
+  width: 140rpx;
+  height: 74rpx;
+  margin: 0;
+  padding: 0;
+  border-radius: 18rpx;
+  background: #001f80;
+  color: #fff;
+  font-size: 28rpx;
+  font-weight: 700;
+  line-height: 74rpx;
+}
+
+.send-btn::after {
+  border: none;
+}

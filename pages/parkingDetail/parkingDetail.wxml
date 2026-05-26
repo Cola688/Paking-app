@@ -30,42 +30,6 @@
     </view>
   </view>
 
-  <view class="package-card" wx:if="{{packageLoading || packageProducts.length > 0}}">
-    <view class="package-header">
-      <view>
-        <view class="package-title">该停车场可购套餐</view>
-        <view class="package-subtitle">购买后可在权益范围内选择停车场</view>
-      </view>
-      <view class="package-more" wx:if="{{packageProducts.length > 0}}" bindtap="goPackageList">全部</view>
-    </view>
-
-    <view class="package-loading" wx:if="{{packageLoading}}">套餐加载中...</view>
-    <block wx:else>
-      <view
-        wx:for="{{packageProducts}}"
-        wx:key="id"
-        class="package-product"
-        data-id="{{item.id}}"
-        bindtap="goPackageDetail"
-      >
-        <view class="package-product-main">
-          <view class="package-product-top">
-            <text class="package-product-name">{{item.productName}}</text>
-            <text class="package-owned" wx:if="{{item.owned}}">已拥有</text>
-          </view>
-          <view class="package-tags">
-            <text wx:for="{{item.tags}}" wx:key="*this" class="package-tag">{{item}}</text>
-          </view>
-          <text class="package-desc">{{item.description}}</text>
-        </view>
-        <view class="package-price-side">
-          <text class="package-price">{{item.displayPriceText}}</text>
-          <text class="package-arrow">›</text>
-        </view>
-      </view>
-    </block>
-  </view>
-
   <view class="action-bar">
     <button class="btn btn-outline" bindtap="openMap">导航到这</button>
     <button class="btn btn-primary" bindtap="startParking">我要停车</button>

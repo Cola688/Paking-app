@@ -12,19 +12,16 @@ Page({
     sortType: 'smart',
     currentLocationText: '定位中',
     reservableCount: 0,
-    packageCount: 0,
     searchResult: [],
     showEmpty: false,
     loading: false
   },
 
-  onLoad(options = {}) {
-    this.preferredParkingIds = this.getPreferredParkingIds(options);
+  onLoad() {
     this.loadReservableParks();
   },
 
   onShow() {
-    this.preferredParkingIds = this.getPreferredParkingIds();
     this.loadReservableParks();
   },
 
@@ -57,21 +54,13 @@ Page({
     this.setData({ loading: true });
     try {
       const location = await this.getCurrentLocation();
-      const [passRes, res] = await Promise.all([
-        api.getCurrentParkingPasses().catch(() => ({ data: [] })),
-        api.getParkingMapPoints()
-      ]);
-      const passParkingLotIds = (passRes?.data || [])
-        .flatMap(item => item.parkingLotIds || [])
-        .filter(id => id !== null && id !== undefined);
-      this.preferredParkingIds = this.getPreferredParkingIds({ parkingLotIds: passParkingLotIds });
+      const res = await api.getParkingMapPoints();
       this.allParks = (res?.data || [])
         .map(item => this.normalizeParkingPoint(item, location))
         .filter(item => item && item.available > 0);
 
       this.setData({
         currentLocationText: location.isLocated ? '已按当前位置推荐' : '定位失败，按默认位置推荐',
-        packageCount: this.allParks.filter(item => item.packagePreferred).length,
         reservableCount: this.allParks.length
       });
       this.applyFilterAndSort();
@@ -134,7 +123,6 @@ Page({
       ? this.getDistance(location.latitude, location.longitude, latitude, longitude)
       : Number.MAX_SAFE_INTEGER;
     const id = String(item.id);
-    const packagePreferred = this.isPreferredParking(item);
 
     return {
       id,
@@ -146,7 +134,6 @@ Page({
       price: this.toNumber(item.price) || 0,
       distance: this.formatDistance(distanceValue),
       distanceValue,
-      packagePreferred,
       hasEV: item.chargingPileSupported === true,
       latitude,
       longitude,
@@ -180,56 +167,7 @@ Page({
       return b.available - a.available || a.distanceValue - b.distanceValue;
     }
 
-    const preferredDiff = Number(b.packagePreferred) - Number(a.packagePreferred);
-    if (preferredDiff !== 0) {
-      return preferredDiff;
-    }
-
     return a.distanceValue - b.distanceValue || b.available - a.available;
-  },
-
-  getPreferredParkingIds(options = {}) {
-    const ids = new Set();
-    const addValue = value => {
-      if (value === null || value === undefined || value === '') return;
-      if (Array.isArray(value)) {
-        value.forEach(addValue);
-        return;
-      }
-      if (typeof value === 'object') {
-        addValue(value.parkingLotId);
-        addValue(value.parkingSpotId);
-        addValue(value.parkingId);
-        addValue(value.parkingLotIds);
-        addValue(value.parkingSpotIds);
-        return;
-      }
-      String(value).split(',').filter(Boolean).forEach(id => ids.add(String(id)));
-    };
-
-    addValue(options.parkingLotId);
-    addValue(options.parkingLotIds);
-    addValue(options.parkingSpotId);
-    addValue(options.parkingId);
-    addValue(wx.getStorageSync('preferredParkingLotIds'));
-    addValue(wx.getStorageSync('selectedPackageParkingLotIds'));
-    addValue(wx.getStorageSync('selectedPackageParkingLotId'));
-    addValue(wx.getStorageSync('currentPackage'));
-    addValue(app.globalData.selectedPackageParkingLotId);
-    addValue(app.globalData.selectedPackageParkingLotIds);
-
-    return ids;
-  },
-
-  isPreferredParking(item) {
-    const candidateIds = [
-      item.id,
-      item.parkingLotId,
-      item.parkingSpotId,
-      item.spotId
-    ].filter(value => value !== null && value !== undefined);
-
-    return candidateIds.some(id => this.preferredParkingIds.has(String(id)));
   },
 
   toNumber(value) {

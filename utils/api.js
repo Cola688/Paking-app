@@ -19,6 +19,29 @@ const getAppData = () => {
   }
 };
 
+const decodeArrayBuffer = (buffer) => {
+  if (!buffer) {
+    return '';
+  }
+
+  if (typeof TextDecoder !== 'undefined') {
+    return new TextDecoder('utf-8').decode(buffer);
+  }
+
+  const bytes = new Uint8Array(buffer);
+  let binary = '';
+  const chunkSize = 8192;
+  for (let i = 0; i < bytes.length; i += chunkSize) {
+    binary += String.fromCharCode.apply(null, bytes.subarray(i, i + chunkSize));
+  }
+
+  try {
+    return decodeURIComponent(escape(binary));
+  } catch (e) {
+    return binary;
+  }
+};
+
 class Request {
   constructor() {
     const globalData = getAppData();
@@ -83,6 +106,195 @@ class Request {
         }
       });
     });
+  }
+
+  stream(options) {
+    const {
+      url,
+      method = 'POST',
+      data,
+      needToken = true,
+      onFrame
+    } = options;
+
+    const globalData = getAppData();
+    this.baseUrl = globalData.baseUrl || getDefaultBaseUrl();
+
+    const header = {
+      ...this.header,
+      Accept: 'text/event-stream'
+    };
+    let requestToken = '';
+    if (needToken) {
+      try {
+        const token = wx.getStorageSync('token');
+        if (token) {
+          requestToken = token;
+          header.Authorization = token;
+        }
+      } catch (e) {}
+    }
+
+    const stream = {
+      requestTask: null,
+      abort() {
+        if (this.requestTask) {
+          this.requestTask.abort();
+        }
+      }
+    };
+
+    stream.promise = new Promise((resolve, reject) => {
+      let sseBuffer = '';
+      let settled = false;
+      let hasChunk = false;
+      const chunkDecoder = typeof TextDecoder !== 'undefined' ? new TextDecoder('utf-8') : null;
+
+      const settleResolve = (payload) => {
+        if (settled) {
+          return;
+        }
+        settled = true;
+        resolve(payload);
+      };
+
+      const settleReject = (payload) => {
+        if (settled) {
+          return;
+        }
+        settled = true;
+        reject(payload);
+      };
+
+      const emitFrame = (frame) => {
+        if (typeof onFrame === 'function') {
+          onFrame(frame);
+        }
+        if (frame?.type === 'done') {
+          settleResolve(frame.data || frame);
+        }
+        if (frame?.type === 'error') {
+          settleReject(frame.data || frame);
+        }
+      };
+
+      const parseSseBlock = (block) => {
+        if (!block || block.startsWith(':')) {
+          return;
+        }
+
+        const dataLines = block
+          .split('\n')
+          .filter(line => line.indexOf('data:') === 0)
+          .map(line => line.slice(5).trimStart());
+
+        if (!dataLines.length) {
+          return;
+        }
+
+        const payload = dataLines.join('\n');
+        try {
+          emitFrame(JSON.parse(payload));
+        } catch (e) {
+          emitFrame({ type: 'message', data: payload });
+        }
+      };
+
+      const parseSseText = (text) => {
+        if (!text) {
+          return;
+        }
+
+        sseBuffer += text.replace(/\r\n/g, '\n');
+        let frameEnd = sseBuffer.indexOf('\n\n');
+        while (frameEnd >= 0) {
+          const block = sseBuffer.slice(0, frameEnd).trim();
+          sseBuffer = sseBuffer.slice(frameEnd + 2);
+          parseSseBlock(block);
+          frameEnd = sseBuffer.indexOf('\n\n');
+        }
+      };
+
+      const decodeChunk = (buffer) => {
+        if (!chunkDecoder) {
+          return decodeArrayBuffer(buffer);
+        }
+        try {
+          return chunkDecoder.decode(buffer, { stream: true });
+        } catch (e) {
+          return decodeArrayBuffer(buffer);
+        }
+      };
+
+      const flushDecoder = () => {
+        if (!chunkDecoder) {
+          return '';
+        }
+        try {
+          return chunkDecoder.decode();
+        } catch (e) {
+          return '';
+        }
+      };
+
+      const task = wx.request({
+        url: `${this.baseUrl}${url}`,
+        method,
+        data,
+        header,
+        timeout: 180000,
+        enableChunked: true,
+        success: (res) => {
+          if (res.statusCode === 401 || res.data?.code === 401) {
+            this.handleUnauthorized(requestToken);
+            settleReject(res.data || { message: '登录已过期' });
+            return;
+          }
+
+          if (res.statusCode < 200 || res.statusCode >= 300) {
+            wx.showToast({ title: res.data?.msg || res.data?.message || 'AI 请求失败', icon: 'none' });
+            settleReject(res.data || { message: 'AI 请求失败' });
+            return;
+          }
+
+          if (!hasChunk && res.data && typeof res.data === 'object' && res.data.code !== 0 && res.data.code !== 200) {
+            wx.showToast({ title: res.data.msg || res.data.message || 'AI 请求失败', icon: 'none' });
+            settleReject(res.data);
+            return;
+          }
+
+          if (!hasChunk && typeof res.data === 'string') {
+            parseSseText(res.data);
+          }
+          if (hasChunk) {
+            parseSseText(flushDecoder());
+          }
+          if (sseBuffer.trim()) {
+            parseSseBlock(sseBuffer.trim());
+            sseBuffer = '';
+          }
+          settleResolve({ finishReason: 'complete' });
+        },
+        fail: (err) => {
+          if (err?.errMsg && err.errMsg.indexOf('abort') >= 0) {
+            settleResolve({ finishReason: 'abort' });
+            return;
+          }
+          wx.showToast({ title: 'AI 连接失败', icon: 'none' });
+          settleReject(err);
+        }
+      });
+
+      stream.requestTask = task;
+      if (task && typeof task.onChunkReceived === 'function') {
+        task.onChunkReceived((res) => {
+          hasChunk = true;
+          parseSseText(decodeChunk(res.data));
+        });
+      }
+    });
+
+    return stream;
   }
 
   handleUnauthorized(requestToken = '') {
@@ -163,6 +375,16 @@ module.exports = {
 
   resetUnauthorizedState() {
     request.resetUnauthorizedState();
+  },
+
+  streamAiChat(options = {}) {
+    const { messages = [], sessionId = '', latitude, longitude, locationAddress, onFrame } = options;
+    return request.stream({
+      url: '/chat/stream',
+      method: 'POST',
+      data: { messages, sessionId, latitude, longitude, locationAddress },
+      onFrame
+    });
   },
   
   loginByWechat(code, userInfo = {}) {

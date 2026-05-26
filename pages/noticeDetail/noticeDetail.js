@@ -84,14 +84,14 @@ Page({
       return `/pages/parkingDetail/parkingDetail?id=${bizId}`;
     }
     if (['package', 'product', 'monthly_product', 'parking_product', 'pass'].includes(bizType)) {
-      return bizId ? `/pages/package/detail?id=${bizId}` : '/pages/package/list';
+      return '/pages/index/index';
     }
 
     return '';
   },
 
   navigateToPage(url) {
-    const tabPages = ['/pages/index/index', '/pages/search/search', '/pages/mine/mine'];
+    const tabPages = ['/pages/index/index', '/pages/ai/ai', '/pages/mine/mine'];
     const path = url.split('?')[0];
 
     if (tabPages.includes(path)) {

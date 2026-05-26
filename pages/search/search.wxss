@@ -161,11 +161,6 @@
   box-shadow: 0 6rpx 22rpx rgba(15, 35, 80, 0.08);
 }
 
-.parking-card.preferred {
-  border-left-color: #001f80;
-  box-shadow: 0 8rpx 28rpx rgba(0, 31, 128, 0.14);
-}
-
 .card-main {
   flex: 1;
   min-width: 0;
@@ -193,11 +188,6 @@
   padding: 5rpx 12rpx;
   border-radius: 999rpx;
   font-size: 21rpx;
-}
-
-.preferred-tag {
-  color: #001f80;
-  background: #eef5ff;
 }
 
 .ev-tag {

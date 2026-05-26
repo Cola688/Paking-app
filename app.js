@@ -16,7 +16,7 @@ App({
     userInfo: null,
     hasLogin: false,
     baseUrl: getBaseUrl(),
-    amapWebServiceKey: '45a5bfb8904470a857b24f23c0a82b58',
+    amapWebServiceKey: 'e018a4fa55aff32bfe8f3ef8f1eaa2ec',
     currentLocation: null
   },
 
