@@ -71,7 +71,7 @@ Page({
         searchResult: [],
         showEmpty: true
       });
-      wx.showToast({ title: '车位加载失败', icon: 'none' });
+      wx.showToast({ title: '停车场加载失败', icon: 'none' });
     } finally {
       this.loadingParks = false;
       this.setData({ loading: false });
@@ -212,6 +212,22 @@ Page({
     const id = e.currentTarget.dataset.id;
     wx.navigateTo({
       url: `/pages/parkingDetail/parkingDetail?id=${id}`
+    });
+  },
+
+  navigateTo(e) {
+    const id = e.currentTarget.dataset.id;
+    const park = (this.data.searchResult || []).find(item => item.id === String(id));
+    if (!park || park.latitude == null || park.longitude == null) {
+      wx.showToast({ title: '暂无位置信息', icon: 'none' });
+      return;
+    }
+    wx.openLocation({
+      latitude: park.latitude,
+      longitude: park.longitude,
+      name: park.name,
+      address: park.address,
+      scale: 18
     });
   }
 });

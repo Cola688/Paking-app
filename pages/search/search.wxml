@@ -1,14 +1,14 @@
 <view class="container">
-  <navbar title="预约管理" showBack="{{false}}" />
+  <navbar title="停车场搜索" />
 
   <view class="hero">
     <view>
-      <view class="hero-title">可预约车位</view>
+      <view class="hero-title">空闲停车场</view>
       <view class="hero-subtitle">{{currentLocationText}}</view>
     </view>
     <view class="hero-count">
       <text class="count-number">{{reservableCount}}</text>
-      <text class="count-label">可约</text>
+      <text class="count-label">空闲</text>
     </view>
   </view>
 
@@ -17,7 +17,7 @@
       <image class="search-icon" src="https://cdn-icons-png.flaticon.com/128/751/751463.png" mode="aspectFit"></image>
       <input
         class="search-input"
-        placeholder="搜索停车场名称、地址或车位编号"
+        placeholder="搜索停车场名称或地址"
         bindinput="onSearchInput"
         bindconfirm="onSearch"
         value="{{keyword}}"
@@ -29,7 +29,7 @@
   <view class="summary-row">
     <view class="summary-item primary">
       <text class="summary-value">{{reservableCount}}</text>
-      <text class="summary-label">可约车位</text>
+      <text class="summary-label">空闲车场</text>
     </view>
     <view class="summary-item">
       <text class="summary-value">{{searchResult.length}}</text>
@@ -44,7 +44,7 @@
   </view>
 
   <view class="result-list">
-    <view class="loading" wx:if="{{loading}}">正在加载可预约车位...</view>
+    <view class="loading" wx:if="{{loading}}">正在加载空闲停车场...</view>
     <view
       class="parking-card"
       wx:for="{{searchResult}}"
@@ -64,12 +64,11 @@
           <text>¥{{item.price}}/时</text>
         </view>
       </view>
-      <view class="card-action" catchtap="reserveParking" data-id="{{item.id}}">预约</view>
+      <view class="card-action" catchtap="navigateTo" data-id="{{item.id}}">导航</view>
     </view>
   </view>
 
   <view class="empty" wx:if="{{showEmpty && !loading}}">
-    <image class="empty-icon" src="/images/empty.png"></image>
-    <text class="empty-text">暂无可预约车位</text>
+    <text class="empty-text">暂无空闲停车场</text>
   </view>
 </view>
