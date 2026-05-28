@@ -197,7 +197,6 @@
 
 .distance-text {
   flex-shrink: 0;
-  align-self: flex-start;
   color: #245d9f;
   font-size: 22rpx;
   font-weight: 600;

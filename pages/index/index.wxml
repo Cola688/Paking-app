@@ -56,13 +56,13 @@
                   {{item.status}}
                 </view>
                 <text class="parking-name">{{item.name}}</text>
+                <text class="distance-text" wx:if="{{item.distance !== '未知'}}">距您{{item.distance}}</text>
               </view>
               <view class="address-row">
                 <image class="location-icon" src="https://cdn-icons-png.flaticon.com/128/684/684908.png" />
                 <text class="address-text">{{item.address}}</text>
               </view>
             </view>
-            <text class="distance-text" wx:if="{{item.distance !== '未知'}}">距您{{item.distance}}</text>
             <image class="parking-img" src="{{item.imgUrl}}" mode="aspectFill" />
           </view>
 
