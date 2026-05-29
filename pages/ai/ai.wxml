@@ -22,10 +22,14 @@
         <view class="avatar">{{item.role === 'user' ? '我' : 'AI'}}</view>
         <view class="bubble {{item.cards && item.cards.length ? 'has-cards' : ''}}">
           <text wx:if="{{item.text}}" class="message-text">{{item.text}}</text>
-          <view wx:elif="{{item.streaming}}" class="typing">
-            <view class="typing-dot"></view>
-            <view class="typing-dot"></view>
-            <view class="typing-dot"></view>
+          <text wx:elif="{{item.streaming && streamingText}}" class="message-text">{{streamingText}}</text>
+          <view wx:elif="{{item.streaming}}" class="thinking">
+            <text class="thinking-text">思考中</text>
+            <view class="thinking-dots">
+              <view class="thinking-dot d1">.</view>
+              <view class="thinking-dot d2">.</view>
+              <view class="thinking-dot d3">.</view>
+            </view>
           </view>
 
           <view wx:if="{{item.cards && item.cards.length}}" class="ai-card-list">
@@ -103,6 +107,6 @@
       bindconfirm="onSend"
       bindinput="onInput"
     />
-    <button class="send-btn" loading="{{loading}}" bindtap="onSend">发送</button>
+    <button class="send-btn" bindtap="onSend">发送</button>
   </view>
 </view>

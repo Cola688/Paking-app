@@ -8,7 +8,7 @@
       <text class="desc-text">共和新路街道停车联盟</text>
     </view>
 
-    <button class="wechat-btn" bindtap="handleWechatLogin" loading="{{loading}}">
+    <button class="wechat-btn" bindtap="handleWechatLogin">
       <image src="/images/user.png" class="wechat-icon" mode="aspectFit"></image>
       <text>微信一键登录</text>
     </button>
@@ -21,7 +21,7 @@
         <input class="input-item password-input" placeholder="请输入密码" password value="{{password}}" bindinput="onPasswordInput" />
         <text class="forget-pwd" bindtap="onForgetPwd">忘记密码?</text>
       </view>
-      <button class="login-btn" bindtap="handleAccountLogin" loading="{{loading}}">登录</button>
+      <button class="login-btn" bindtap="handleAccountLogin">登录</button>
     </view>
 
     <view class="register-tip">

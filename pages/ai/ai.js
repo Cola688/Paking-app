@@ -22,12 +22,14 @@ Page({
         text: '你好，我是停车 AI 助手。可以帮你快速了解附近停车、导航、共享申请和停车规则。'
       }
     ],
+    streamingText: '',
     quickPrompts: QUICK_PROMPTS,
     scrollIntoView: 'msg-1'
   },
 
   onLoad() {
     this.sessionId = this.createSessionId();
+    this._streamingAcc = '';
   },
 
   onUnload() {
@@ -64,10 +66,12 @@ Page({
     });
     const messages = [...conversationMessages, assistantMessage];
 
+    this._streamingAcc = '';
     this.setData({
       inputValue: '',
       loading: true,
       messages,
+      streamingText: '',
       scrollIntoView: `msg-${assistantMessage.id}`
     });
 
@@ -177,10 +181,8 @@ Page({
   },
 
   appendAssistantText(messageId, content) {
-    this.updateMessage(messageId, item => ({
-      text: `${item.text || ''}${content}`,
-      streaming: true
-    }));
+    this._streamingAcc += content;
+    this.setData({ streamingText: this._streamingAcc });
   },
 
   appendAssistantCards(messageId, cards) {
@@ -191,34 +193,34 @@ Page({
         ...existed,
         ...cards.filter(card => !existedKeys.includes(card.key))
       ];
-      return {
-        cards: nextCards,
-        streaming: true
-      };
+      return { cards: nextCards, streaming: true };
     });
   },
 
   finishAssistant(messageId) {
-    this.updateMessage(messageId, item => {
-      const hasText = Boolean((item.text || '').trim());
+    const finalText = this._streamingAcc;
+    this._streamingAcc = '';
+    const messages = this.data.messages.map(item => {
+      if (item.id !== messageId) return item;
+      const hasText = Boolean((finalText || '').trim());
       const hasCards = Boolean(item.cards && item.cards.length);
       return {
-        text: hasText
-          ? item.text
-          : hasCards
-            ? '已为你整理了相关信息，详情见下方卡片。'
-            : '我暂时没有拿到有效回复，请稍后再试。',
+        ...item,
+        text: hasText ? finalText : (hasCards ? '已为你整理了相关信息，详情见下方卡片。' : '我暂时没有拿到有效回复，请稍后再试。'),
         streaming: false
       };
     });
+    this.setData({ messages, streamingText: '', scrollIntoView: `msg-${messageId}` });
   },
 
   failAssistant(messageId, err) {
+    this._streamingAcc = '';
     const message = err?.message || err?.msg || 'AI 暂时没有响应，请稍后再试。';
-    this.updateMessage(messageId, item => ({
-      text: item.text || message,
-      streaming: false
-    }));
+    const messages = this.data.messages.map(item => {
+      if (item.id !== messageId) return item;
+      return { ...item, text: item.text || message, streaming: false };
+    });
+    this.setData({ messages, streamingText: '' });
   },
 
   updateMessage(messageId, updater) {
@@ -450,6 +452,7 @@ Page({
   },
 
   abortStream() {
+    this._streamingAcc = '';
     if (this.chatStream) {
       this.chatStream.abort();
       this.chatStream = null;
