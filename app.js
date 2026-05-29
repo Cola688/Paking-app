@@ -1,15 +1,6 @@
 const api = require('./utils/api.js');
 
-const getBaseUrl = () => {
-  try {
-    const platform = wx.getSystemInfoSync().platform;
-    return platform === 'devtools'
-      ? 'http://localhost:7003/app/api/v1'
-      : 'http://192.168.124.8:7003/app/api/v1';
-  } catch (e) {
-    return 'http://localhost:7003/app/api/v1';
-  }
-};
+const getBaseUrl = () => 'http://localhost:7003/app/api/v1';
 
 App({
   globalData: {

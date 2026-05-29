@@ -1,14 +1,6 @@
-const DEVTOOLS_BASE_URL = 'http://localhost:7003/app/api/v1';
-const DEVICE_BASE_URL = 'http://192.168.124.8:7003/app/api/v1';
+const BASE_URL = 'http://localhost:7003/app/api/v1';
 
-const getDefaultBaseUrl = () => {
-  try {
-    const platform = wx.getSystemInfoSync().platform;
-    return platform === 'devtools' ? DEVTOOLS_BASE_URL : DEVICE_BASE_URL;
-  } catch (e) {
-    return DEVTOOLS_BASE_URL;
-  }
-};
+const getDefaultBaseUrl = () => BASE_URL;
 
 const getAppData = () => {
   try {
@@ -77,7 +69,7 @@ class Request {
         method,
         data,
         header,
-        timeout: 10000,
+        timeout: 30000,
         success: (res) => {
           wx.hideLoading();
           
@@ -509,5 +501,13 @@ module.exports = {
 
   clearNotices(params = {}) {
     return request.delete('/notices', params);
+  },
+
+  speechToText(audioBase64, format = 'mp3', sampleRate = 16000) {
+    return request.post('/ai/speech/recognize', {
+      audio: audioBase64,
+      format,
+      sampleRate
+    });
   }
 };

@@ -249,10 +249,17 @@
   box-sizing: border-box;
 }
 
+.chat-input-wrap {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
 .chat-input {
   flex: 1;
   height: 74rpx;
-  padding: 0 24rpx;
+  padding: 0 90rpx 0 24rpx;
   border-radius: 18rpx;
   background: #f4f7fb;
   color: #1f2937;
@@ -260,19 +267,72 @@
   box-sizing: border-box;
 }
 
-.send-btn {
-  width: 140rpx;
+.input-voice-icon {
+  position: absolute;
+  right: 14rpx;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40rpx;
+  height: 40rpx;
+}
+
+.voice-area {
+  flex: 1;
+  display: flex;
+  gap: 14rpx;
+}
+
+.keyboard-btn {
+  flex-shrink: 0;
+  width: 74rpx;
   height: 74rpx;
-  margin: 0;
-  padding: 0;
+  padding: 18rpx;
+  border-radius: 18rpx;
+  background: #f4f7fb;
+  box-sizing: border-box;
+}
+
+.voice-hold {
+  flex: 1;
+  height: 74rpx;
+  border-radius: 18rpx;
+  background: #f4f7fb;
+  color: #245d9f;
+  font-size: 28rpx;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  transition: all 0.15s;
+}
+
+.voice-hold--recording {
+  background: #e53e3e;
+  color: #fff;
+  animation: voicePulse 1.2s ease-in-out infinite;
+}
+
+@keyframes voicePulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.send-btn {
+  padding: 0 22rpx;
+  height: 74rpx;
   border-radius: 18rpx;
   background: #001f80;
   color: #fff;
   font-size: 28rpx;
   font-weight: 700;
   line-height: 74rpx;
+  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.send-btn::after {
-  border: none;
+.send-btn--disabled {
+  opacity: 0.6;
 }

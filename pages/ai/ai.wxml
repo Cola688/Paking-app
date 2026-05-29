@@ -1,8 +1,8 @@
 <view class="container">
-  <navbar title="小新" showBack="{{false}}" />
+  <navbar title="AI 小新" showBack="{{false}}" />
 
   <view class="hero">
-    <text class="hero-title">小新智能助手</text>
+    <text class="hero-title">AI 小新智能助手</text>
     <text class="hero-subtitle">帮你处理找车位、导航和共享申请问题</text>
   </view>
 
@@ -95,14 +95,27 @@
   </scroll-view>
 
   <view class="input-bar">
-    <input
-      class="chat-input"
-      confirm-type="send"
-      placeholder="问问停车相关问题"
-      value="{{inputValue}}"
-      bindconfirm="onSend"
-      bindinput="onInput"
-    />
-    <button class="send-btn" loading="{{loading}}" bindtap="onSend">发送</button>
+    <view wx:if="{{!voiceMode}}" class="chat-input-wrap">
+      <input
+        class="chat-input"
+        confirm-type="send"
+        placeholder="问问停车相关问题"
+        value="{{inputValue}}"
+        focus="{{inputFocus}}"
+        bindconfirm="onSend"
+        bindinput="onInput"
+      />
+      <image class="input-voice-icon" src="/images/voice.svg" bindtap="onSwitchVoice" />
+    </view>
+    <view wx:if="{{voiceMode}}" class="voice-area">
+      <image class="keyboard-btn" src="/images/keyboard.svg" catchtap="onSwitchKeyboard" />
+      <view
+        class="voice-hold {{isRecording ? 'voice-hold--recording' : ''}}"
+        catchtouchstart="onVoiceStart"
+        catchtouchend="onVoiceEnd"
+        catchtouchcancel="onVoiceEnd"
+      >{{isRecording ? '松开结束' : '按住说话'}}</view>
+    </view>
+    <view class="send-btn {{loading ? 'send-btn--disabled' : ''}}" bindtap="onSend">{{loading ? '...' : '发送'}}</view>
   </view>
 </view>

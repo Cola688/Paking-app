@@ -15,6 +15,9 @@ Page({
   data: {
     inputValue: '',
     loading: false,
+    voiceMode: false,
+    isRecording: false,
+    inputFocus: false,
     messages: [
       {
         id: 1,
@@ -28,10 +31,91 @@ Page({
 
   onLoad() {
     this.sessionId = this.createSessionId();
+    this.initRecorder();
   },
 
   onUnload() {
     this.abortStream();
+  },
+
+  initRecorder() {
+    const rm = wx.getRecorderManager();
+    rm.onStart(() => {
+      this.setData({ isRecording: true });
+    });
+    rm.onStop((res) => {
+      this.setData({ isRecording: false });
+      if (res.tempFilePath) {
+        this.handleVoiceFile(res.tempFilePath);
+      }
+    });
+    rm.onError(() => {
+      this.setData({ isRecording: false });
+      wx.showToast({ title: '录音失败，请重试', icon: 'none' });
+    });
+    this.recorderManager = rm;
+  },
+
+  onSwitchVoice() {
+    this.setData({ voiceMode: true });
+  },
+
+  onSwitchKeyboard() {
+    this.setData({ voiceMode: false, inputFocus: true });
+  },
+
+  onVoiceStart() {
+    if (this.data.loading) return;
+    wx.authorize({ scope: 'scope.record' })
+      .then(() => {
+        this.recorderManager.start({
+          format: 'mp3',
+          duration: 60000,
+          sampleRate: 16000,
+          numberOfChannels: 1,
+          encodeBitRate: 48000
+        });
+      })
+      .catch(() => {
+        wx.showModal({
+          title: '需要录音权限',
+          content: '请在设置中开启麦克风权限',
+          success: (res) => {
+            if (res.confirm) wx.openSetting();
+          }
+        });
+      });
+  },
+
+  onVoiceEnd() {
+    if (!this.data.isRecording) return;
+    this.recorderManager.stop();
+  },
+
+  async handleVoiceFile(filePath) {
+    const fs = wx.getFileSystemManager();
+    const info = fs.getFileInfoSync ? fs.getFileInfoSync(filePath) : {};
+    console.log('[语音录音] 文件路径:', filePath);
+    console.log('[语音录音] 文件大小:', (info.size / 1024).toFixed(1) + ' KB');
+
+    wx.showLoading({ title: '识别中...', mask: true });
+    try {
+      const base64 = fs.readFileSync(filePath, 'base64');
+      const res = await api.speechToText(base64, 'mp3', 16000);
+      const text = res?.data?.text || '';
+      console.log('[语音识别] 结果:', text);
+      if (text) {
+        this.setData({ voiceMode: false });
+        this.sendText(text);
+      } else {
+        wx.showToast({ title: '未识别到语音内容', icon: 'none' });
+      }
+    } catch (err) {
+      console.error('[语音识别] 失败:', err);
+      wx.showToast({ title: '语音识别失败，请重试', icon: 'none' });
+    } finally {
+      wx.hideLoading();
+    }
   },
 
   onInput(e) {

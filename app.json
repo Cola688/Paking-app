@@ -46,15 +46,15 @@
       },
       {
         "pagePath": "pages/ai/ai",
-        "text": "小新",
-        "iconPath": "images/search.png",
-        "selectedIconPath": "images/search-active.png"
+        "text": "AI小新",
+        "iconPath": "images/ai.png",
+        "selectedIconPath": "images/ai-active.png"
       },
       {
         "pagePath": "pages/mine/mine",
         "text": "我的",
-        "iconPath": "images/user.png",
-        "selectedIconPath": "images/user-active.png"
+        "iconPath": "images/me.png",
+        "selectedIconPath": "images/me-active.png"
       }
     ]
   },
