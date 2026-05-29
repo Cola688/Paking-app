@@ -148,8 +148,8 @@ Page({
         return [];
       }
 
-      const total = Math.max(this.toNumber(item.total) || 0, 0);
-      const available = Math.max(this.toNumber(item.available) || 0, 0);
+      const total = Math.max(this.toNumber(item.offPeakSpotCount ?? item.total ?? item.totalSpotCount) || 0, 0);
+      const available = Math.max(this.toNumber(item.remainingSpotCount ?? item.available ?? item.sharedSpotCount) || 0, 0);
       const latitude = this.toNumber(item.latitude);
       const longitude = this.toNumber(item.longitude);
       const marker = {

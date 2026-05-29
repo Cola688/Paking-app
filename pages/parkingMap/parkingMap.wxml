@@ -68,7 +68,7 @@
       </view>
       <view class="stat-item">
         <text class="stat-value">{{selectedPark.total}}</text>
-        <text class="stat-label">总车位</text>
+        <text class="stat-label">错峰车位</text>
       </view>
       <view class="stat-item">
         <text class="stat-value">¥{{selectedPark.price}}</text>

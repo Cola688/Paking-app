@@ -3,7 +3,7 @@ const api = require('../../utils/api.js');
 const amap = require('../../utils/amap.js');
 
 const QUICK_PROMPTS = [
-  '帮我找附近空闲车位',
+  '帮我找附近可预约车位',
   '共享申请怎么提交',
   '怎么导航到停车场',
   '停车收费怎么看'
@@ -362,8 +362,8 @@ Page({
     const rows = [];
     const tags = [];
 
-    this.pushRow(rows, '可预约', this.formatCount(item.availableSpots, '个'));
-    this.pushRow(rows, '总车位', this.formatCount(item.totalSpots, '个'));
+    this.pushRow(rows, '剩余车位', this.formatCount(item.remainingSpotCount ?? item.availableSpots ?? item.available, '个'));
+    this.pushRow(rows, '错峰车位', this.formatCount(item.offPeakSpotCount ?? item.total, '个'));
     this.pushRow(rows, '价格', this.formatPrice(item.price, item.priceUnit));
     this.pushRow(rows, '月租', this.formatPrice(item.monthlyPrice, '月'));
     this.pushRow(rows, '营业', item.businessHours);
@@ -373,7 +373,7 @@ Page({
     this.pushRow(rows, '离场', this.formatDateTime(item.reserveEndTime));
     this.pushRow(rows, '申请单', item.applicationNo);
     this.pushRow(rows, '类型', item.applicationType);
-    this.pushRow(rows, '共享数', this.formatShareCount(item));
+    this.pushRow(rows, '剩余/错峰', this.formatShareCount(item));
     this.pushRow(rows, '有效期至', this.formatDateTime(item.validEndAt));
     this.pushRow(rows, '可选停车场', this.formatCount(item.maxSelectLotCount, '个'));
     this.pushRow(rows, '可绑车辆', this.formatCount(item.maxBindVehicleCount, '辆'));
@@ -434,10 +434,12 @@ Page({
   },
 
   formatShareCount(item) {
-    if (!this.isPresent(item.sharedSpotCount) && !this.isPresent(item.totalSpotCount)) {
+    const remaining = item.remainingSpotCount ?? item.availableSpots ?? item.available ?? item.sharedSpotCount;
+    const offPeak = item.offPeakSpotCount ?? item.total ?? item.totalSpotCount;
+    if (!this.isPresent(remaining) || !this.isPresent(offPeak)) {
       return '';
     }
-    return `${item.sharedSpotCount || 0}/${item.totalSpotCount || 0}个`;
+    return `${remaining || 0}/${offPeak || 0}个`;
   },
 
   formatDateTime(value) {

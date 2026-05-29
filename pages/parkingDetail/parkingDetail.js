@@ -26,8 +26,8 @@ Page({
   },
 
   normalizeParkingInfo(item) {
-    const totalSpaces = this.toNumber(item.total) || 0;
-    const available = this.toNumber(item.available) || 0;
+    const totalSpaces = Math.max(this.toNumber(item.offPeakSpotCount ?? item.total ?? item.totalSpotCount) || 0, 0);
+    const available = Math.max(this.toNumber(item.remainingSpotCount ?? item.available ?? item.sharedSpotCount) || 0, 0);
     return {
       id: String(item.id),
       parkingLotId: item.parkingLotId ? String(item.parkingLotId) : '',

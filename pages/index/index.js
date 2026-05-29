@@ -166,8 +166,8 @@ Page({
   normalizeParkingPoint(item, location) {
     const latitude = this.toNumber(item.latitude)
     const longitude = this.toNumber(item.longitude)
-    const available = this.toNumber(item.available ?? item.sharedSpotCount) || 0
-    const total = this.toNumber(item.total ?? item.totalSpotCount) || 0
+    const available = Math.max(this.toNumber(item.remainingSpotCount ?? item.available ?? item.sharedSpotCount) || 0, 0)
+    const total = Math.max(this.toNumber(item.offPeakSpotCount ?? item.total ?? item.totalSpotCount) || 0, 0)
     const distanceValue = latitude !== null && longitude !== null
       ? this.getDistance(location.latitude, location.longitude, latitude, longitude)
       : Number.MAX_SAFE_INTEGER

@@ -168,8 +168,8 @@ Page({
         return [];
       }
 
-      const total = Math.max(this.toNumber(item.totalSpotCount) || 0, 0);
-      const available = Math.max(this.toNumber(item.sharedSpotCount) || 0, 0);
+      const total = Math.max(this.toNumber(item.offPeakSpotCount ?? item.total ?? item.totalSpotCount) || 0, 0);
+      const available = Math.max(this.toNumber(item.remainingSpotCount ?? item.available ?? item.sharedSpotCount) || 0, 0);
       const parkingLotCount = Math.max(this.toNumber(item.parkingLotCount) || 0, 0);
       const xRatio = this.clamp(center.x / MAP_WORLD_WIDTH);
       const yRatio = this.clamp(center.y / MAP_WORLD_HEIGHT);
