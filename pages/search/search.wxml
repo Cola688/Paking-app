@@ -40,7 +40,7 @@
   <view class="filter-bar">
     <view class="filter-item {{sortType === 'smart' ? 'active' : ''}}" data-type="smart" bindtap="toggleSort">推荐</view>
     <view class="filter-item {{sortType === 'price' ? 'active' : ''}}" data-type="price" bindtap="toggleSort">价格最低</view>
-    <view class="filter-item {{sortType === 'available' ? 'active' : ''}}" data-type="available" bindtap="toggleSort">余位最多</view>
+    <view class="filter-item {{sortType === 'available' ? 'active' : ''}}" data-type="available" bindtap="toggleSort">剩余最多</view>
   </view>
 
   <view class="result-list">
@@ -60,7 +60,7 @@
         <view class="address">{{item.address}}</view>
         <view class="meta-row">
           <text>{{item.distance}}</text>
-          <text>余位 {{item.available}}/{{item.total}}</text>
+          <text>剩余/错峰 {{item.available}}/{{item.total}}</text>
           <text>¥{{item.price}}/时</text>
         </view>
       </view>

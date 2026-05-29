@@ -435,18 +435,6 @@ module.exports = {
     return Promise.resolve({ code: 200, data: { phone, code } });
   },
 
-  getParkingLots() {
-    return request.get('/parking/lots');
-  },
-
-  getParkingLotsByLocation(lat, lng, radius) {
-    return request.get('/parking/lots/nearby', { lat, lng, radius });
-  },
-
-  getParkingDetail(id) {
-    return request.get(`/parking/lots/${id}`);
-  },
-
   getParkingMapPoints() {
     return request.get('/parking/maps/points');
   },
