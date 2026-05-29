@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:7003/app/api/v1';
+const BASE_URL = 'http://122.51.76.194:7003/app/api/v1';
 
 const getDefaultBaseUrl = () => BASE_URL;
 

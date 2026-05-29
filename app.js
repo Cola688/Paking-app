@@ -1,6 +1,6 @@
 const api = require('./utils/api.js');
 
-const getBaseUrl = () => 'http://localhost:7003/app/api/v1';
+const getBaseUrl = () => 'http://122.51.76.194:7003/app/api/v1';
 
 App({
   globalData: {
