@@ -123,8 +123,53 @@
   position: absolute;
   left: 0;
   top: 0;
+  z-index: 1;
   width: 1404rpx;
   height: 993rpx;
+}
+
+.area-map-mask {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 3;
+  width: 1404rpx;
+  height: 993rpx;
+  background: rgba(15, 23, 42, 0.34);
+}
+
+.area-highlight-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 5;
+  width: 1404rpx;
+  height: 993rpx;
+  background: rgba(22, 160, 93, 0.34);
+}
+
+.area-highlight-layer {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 6;
+  width: 1404rpx;
+  height: 993rpx;
+  pointer-events: none;
+}
+
+.area-highlight-line {
+  position: absolute;
+  height: 8rpx;
+  border-radius: 999rpx;
+  background: repeating-linear-gradient(
+    to right,
+    #16a05d 0,
+    #16a05d 18rpx,
+    transparent 18rpx,
+    transparent 30rpx
+  );
+  transform-origin: 0 50%;
 }
 
 .area-map-tile {
