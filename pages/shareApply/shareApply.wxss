@@ -138,6 +138,16 @@
   background: rgba(15, 23, 42, 0.34);
 }
 
+.area-highlight-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 5;
+  width: 1404rpx;
+  height: 993rpx;
+  background: rgba(22, 160, 93, 0.34);
+}
+
 .area-highlight-layer {
   position: absolute;
   left: 0;
@@ -152,21 +162,14 @@
   position: absolute;
   height: 8rpx;
   border-radius: 999rpx;
-  background: #16a05d;
-  box-shadow: 0 0 0 4rpx rgba(255, 255, 255, 0.9), 0 0 22rpx rgba(22, 160, 93, 0.72);
+  background: repeating-linear-gradient(
+    to right,
+    #16a05d 0,
+    #16a05d 18rpx,
+    transparent 18rpx,
+    transparent 30rpx
+  );
   transform-origin: 0 50%;
-}
-
-.area-highlight-point {
-  position: absolute;
-  width: 18rpx;
-  height: 18rpx;
-  border: 4rpx solid #fff;
-  border-radius: 50%;
-  background: #16a05d;
-  box-shadow: 0 0 18rpx rgba(22, 160, 93, 0.78);
-  transform: translate(-50%, -50%);
-  box-sizing: border-box;
 }
 
 .area-map-tile {

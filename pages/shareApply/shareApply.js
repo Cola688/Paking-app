@@ -141,6 +141,7 @@ Page({
         areaCode,
         available,
         displayPoints,
+        fillStyle: this.buildAreaFillStyle(displayPoints),
         id: String(item.id),
         lineSegments: this.buildAreaLineSegments(displayPoints),
         name,
@@ -210,6 +211,18 @@ Page({
         y: point.y
       };
     });
+  },
+
+  buildAreaFillStyle(points = []) {
+    const displayPoints = Array.isArray(points) ? points : [];
+    if (displayPoints.length < 3) {
+      return '';
+    }
+
+    const polygon = displayPoints
+      .map(point => `${Number((point.x / MAP_DISPLAY_WIDTH * 100).toFixed(4))}% ${Number((point.y / MAP_DISPLAY_HEIGHT * 100).toFixed(4))}%`)
+      .join(', ');
+    return `clip-path: polygon(${polygon}); -webkit-clip-path: polygon(${polygon});`;
   },
 
   buildShortName(areaCode, index) {
