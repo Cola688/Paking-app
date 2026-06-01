@@ -1,4 +1,5 @@
 const api = require('../../utils/api.js');
+const { MAP_TILE_BASE_URL } = require('../../utils/config.js');
 
 const MAP_WORLD_WIDTH = 10;
 const MAP_WORLD_HEIGHT = 7.07;
@@ -6,7 +7,7 @@ const MAP_DISPLAY_WIDTH = 1404;
 const MAP_DISPLAY_HEIGHT = 993;
 
 Page({
-  mapImageBaseUrl: 'http://192.168.124.8:7003/app/api/v1',
+  mapTileBaseUrl: MAP_TILE_BASE_URL,
 
   data: {
     agreement: true,
@@ -42,8 +43,8 @@ Page({
 
   onLoad() {
     const app = getApp();
-    if (app?.globalData?.baseUrl) {
-      this.mapImageBaseUrl = app.globalData.baseUrl;
+    if (app?.globalData?.mapTileBaseUrl) {
+      this.mapTileBaseUrl = app.globalData.mapTileBaseUrl;
     }
 
     const userInfo = wx.getStorageSync('userInfo') || {};
@@ -61,14 +62,12 @@ Page({
 
   loadMapTiles() {
     const areaMapTiles = this.buildMapTiles();
-    this.loadedTileCount = 0;
     this.tileLoadFailed = false;
     this.setData({
       areaMapTiles,
-      tileLoadedCount: 0,
+      tileLoadedCount: areaMapTiles.length,
       tileTotalCount: areaMapTiles.length
     });
-    this.downloadMapTiles(areaMapTiles);
   },
 
   buildMapTiles() {
@@ -79,9 +78,8 @@ Page({
           col,
           height: this.data.tileHeight + (row === 0 ? 0 : this.data.tileOverlap),
           key: `${row}_${col}`,
-          remoteUrl: `${this.mapImageBaseUrl}/parking/maps/local-tile/${row}/${col}?v=2026052101`,
           row,
-          url: '',
+          url: `${this.mapTileBaseUrl}/tile_${row}_${col}.png`,
           width: this.data.tileWidth + (col === 0 ? 0 : this.data.tileOverlap),
           x: col === 0 ? 0 : col * this.data.tileWidth - this.data.tileOverlap,
           y: row === 0 ? 0 : row * this.data.tileHeight - this.data.tileOverlap
@@ -91,49 +89,9 @@ Page({
     return tiles;
   },
 
-  async downloadMapTiles(tiles) {
-    const token = wx.getStorageSync('token');
-    for (let index = 0; index < tiles.length; index += 1) {
-      const tile = tiles[index];
-      try {
-        const filePath = await this.requestTileFile(tile, token);
-        this.loadedTileCount += 1;
-        this.setData({
-          [`areaMapTiles[${index}].url`]: filePath,
-          tileLoadedCount: this.loadedTileCount
-        });
-      } catch (err) {
-        console.error('加载共享申请地图瓦片失败:', tile, err);
-        this.showTileLoadError();
-      }
-    }
-  },
-
-  requestTileFile(tile, token) {
-    return new Promise((resolve, reject) => {
-      wx.request({
-        url: tile.remoteUrl,
-        method: 'GET',
-        responseType: 'arraybuffer',
-        header: token ? { Authorization: token } : {},
-        timeout: 10000,
-        success: (res) => {
-          if (res.statusCode !== 200 || !res.data || !res.data.byteLength) {
-            reject({ statusCode: res.statusCode, dataLength: (res.data && res.data.byteLength) || 0 });
-            return;
-          }
-
-          const filePath = `${wx.env.USER_DATA_PATH}/share_area_tile_${tile.key}.png`;
-          wx.getFileSystemManager().writeFile({
-            data: res.data,
-            filePath,
-            success: () => resolve(filePath),
-            fail: reject
-          });
-        },
-        fail: reject
-      });
-    });
+  onTileError(e) {
+    console.error('加载共享申请地图瓦片失败:', e);
+    this.showTileLoadError();
   },
 
   showTileLoadError() {
@@ -163,7 +121,8 @@ Page({
 
   buildMapAreas(areas = []) {
     return (Array.isArray(areas) ? areas : []).flatMap((item, index) => {
-      const center = this.resolveAreaCenter(item);
+      const worldPoints = this.resolveAreaWorldPoints(item);
+      const center = this.resolveAreaCenter(item, worldPoints);
       if (!center || item.id === undefined || item.id === null) {
         return [];
       }
@@ -175,12 +134,15 @@ Page({
       const yRatio = this.clamp(center.y / MAP_WORLD_HEIGHT);
       const name = item.name || `共享区域${index + 1}`;
       const areaCode = `区域${index + 1}`;
+      const displayPoints = this.buildAreaDisplayPoints(worldPoints);
 
       return [{
         address: parkingLotCount > 0 ? `包含${parkingLotCount}个停车场` : '暂未包含停车场',
         areaCode,
         available,
+        displayPoints,
         id: String(item.id),
+        lineSegments: this.buildAreaLineSegments(displayPoints),
         name,
         rawId: '',
         sharedAreaId: String(item.id),
@@ -193,17 +155,14 @@ Page({
     });
   },
 
-  resolveAreaCenter(area) {
+  resolveAreaCenter(area, points) {
     const centerX = this.toNumber(area.centerX);
     const centerY = this.toNumber(area.centerY);
     if (centerX !== null && centerY !== null) {
       return { x: centerX, y: centerY };
     }
 
-    const points = Array.isArray(area.points) ? area.points : [];
-    const validPoints = points
-      .map(point => ({ x: this.toNumber(point.x), y: this.toNumber(point.y) }))
-      .filter(point => point.x !== null && point.y !== null);
+    const validPoints = Array.isArray(points) ? points : this.resolveAreaWorldPoints(area);
     if (validPoints.length === 0) {
       return null;
     }
@@ -216,6 +175,41 @@ Page({
       x: total.x / validPoints.length,
       y: total.y / validPoints.length
     };
+  },
+
+  resolveAreaWorldPoints(area) {
+    const points = Array.isArray(area.points) ? area.points : [];
+    return points
+      .map(point => ({ x: this.toNumber(point.x), y: this.toNumber(point.y) }))
+      .filter(point => point.x !== null && point.y !== null);
+  },
+
+  buildAreaDisplayPoints(points = []) {
+    return (Array.isArray(points) ? points : []).map((point, index) => ({
+      key: String(index),
+      x: Math.round(this.clamp(point.x / MAP_WORLD_WIDTH) * MAP_DISPLAY_WIDTH),
+      y: Math.round(this.clamp(point.y / MAP_WORLD_HEIGHT) * MAP_DISPLAY_HEIGHT)
+    }));
+  },
+
+  buildAreaLineSegments(points = []) {
+    const displayPoints = Array.isArray(points) ? points : [];
+    if (displayPoints.length < 3) {
+      return [];
+    }
+
+    return displayPoints.map((point, index) => {
+      const next = displayPoints[(index + 1) % displayPoints.length];
+      const dx = next.x - point.x;
+      const dy = next.y - point.y;
+      return {
+        angle: Number((Math.atan2(dy, dx) * 180 / Math.PI).toFixed(2)),
+        key: `${index}_${(index + 1) % displayPoints.length}`,
+        length: Number(Math.sqrt(dx * dx + dy * dy).toFixed(2)),
+        x: point.x,
+        y: point.y
+      };
+    });
   },
 
   buildShortName(areaCode, index) {
@@ -236,6 +230,56 @@ Page({
 
   clamp(value) {
     return Math.min(Math.max(Number(value) || 0, 0), 1);
+  },
+
+  onAreaMapTap(e) {
+    const touch = e.changedTouches?.[0] || e.touches?.[0];
+    if (!touch) {
+      return;
+    }
+
+    wx.createSelectorQuery().in(this).select('.area-map-mask').boundingClientRect((rect) => {
+      if (!rect || !rect.width || !rect.height) {
+        return;
+      }
+
+      const x = ((touch.clientX - rect.left) / rect.width) * MAP_DISPLAY_WIDTH;
+      const y = ((touch.clientY - rect.top) / rect.height) * MAP_DISPLAY_HEIGHT;
+      const area = this.findAreaByPoint({ x, y });
+      if (area) {
+        this.selectAreaById(area.id);
+      }
+    }).exec();
+  },
+
+  findAreaByPoint(point) {
+    const areas = this.data.mapAreas || [];
+    for (let index = areas.length - 1; index >= 0; index -= 1) {
+      const area = areas[index];
+      if (this.isPointInDisplayPolygon(point, area.displayPoints)) {
+        return area;
+      }
+    }
+    return null;
+  },
+
+  isPointInDisplayPolygon(point, polygon) {
+    const points = Array.isArray(polygon) ? polygon : [];
+    if (points.length < 3) {
+      return false;
+    }
+
+    let inside = false;
+    for (let index = 0, previousIndex = points.length - 1; index < points.length; previousIndex = index, index += 1) {
+      const current = points[index];
+      const previous = points[previousIndex];
+      const intersects = current.y > point.y !== previous.y > point.y
+        && point.x < ((previous.x - current.x) * (point.y - current.y)) / (previous.y - current.y) + current.x;
+      if (intersects) {
+        inside = !inside;
+      }
+    }
+    return inside;
   },
 
   onInput(e) {

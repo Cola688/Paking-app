@@ -63,9 +63,27 @@
                   class="area-map-tile"
                   src="{{item.url}}"
                   mode="scaleToFill"
+                  binderror="onTileError"
                   style="left: {{item.x}}rpx; top: {{item.y}}rpx; width: {{item.width}}rpx; height: {{item.height}}rpx;"
                 />
               </block>
+            </view>
+            <view class="area-map-mask" wx:if="{{mapAreas.length > 0}}" catchtap="onAreaMapTap"></view>
+            <view class="area-highlight-layer" wx:if="{{selectedArea && selectedArea.lineSegments.length}}" catchtap="onAreaMapTap">
+              <view
+                class="area-highlight-line"
+                wx:for="{{selectedArea.lineSegments}}"
+                wx:for-item="line"
+                wx:key="key"
+                style="left: {{line.x}}rpx; top: {{line.y}}rpx; width: {{line.length}}rpx; transform: translateY(-50%) rotate({{line.angle}}deg);"
+              ></view>
+              <view
+                class="area-highlight-point"
+                wx:for="{{selectedArea.displayPoints}}"
+                wx:for-item="point"
+                wx:key="key"
+                style="left: {{point.x}}rpx; top: {{point.y}}rpx;"
+              ></view>
             </view>
             <block wx:for="{{mapAreas}}" wx:key="id">
               <view

@@ -3,32 +3,32 @@
   "packOptions": {
     "ignore": [
       {
-        "type": "file",
-        "value": "images/parking-map.pdf"
+        "value": "images/parking-map.pdf",
+        "type": "file"
       },
       {
-        "type": "file",
-        "value": "images/parking-map-hd.png"
+        "value": "images/parking-map-hd.png",
+        "type": "file"
       },
       {
-        "type": "file",
-        "value": "images/parking-map-ultra.png"
+        "value": "images/parking-map-ultra.png",
+        "type": "file"
       },
       {
-        "type": "file",
-        "value": "images/parking-map-ultra.jpg"
+        "value": "images/parking-map-ultra.jpg",
+        "type": "file"
       },
       {
-        "type": "file",
-        "value": "images/parking-map-4500.png"
+        "value": "images/parking-map-4500.png",
+        "type": "file"
       },
       {
-        "type": "file",
-        "value": "images/parking-map-4200.png"
+        "value": "images/parking-map-4200.png",
+        "type": "file"
       },
       {
-        "type": "folder",
-        "value": "images/parking-map-tiles"
+        "value": "images/parking-map-tiles",
+        "type": "folder"
       }
     ],
     "include": []

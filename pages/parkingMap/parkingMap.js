@@ -1,7 +1,8 @@
 const api = require('../../utils/api.js');
+const { MAP_TILE_BASE_URL } = require('../../utils/config.js');
 
 Page({
-  mapImageBaseUrl: 'http://192.168.124.8:7003/app/api/v1',
+  mapTileBaseUrl: MAP_TILE_BASE_URL,
 
   data: {
     mapWidth: 1404,
@@ -29,8 +30,8 @@ Page({
 
   onLoad(options) {
     const app = getApp();
-    if (app?.globalData?.baseUrl) {
-      this.mapImageBaseUrl = app.globalData.baseUrl;
+    if (app?.globalData?.mapTileBaseUrl) {
+      this.mapTileBaseUrl = app.globalData.mapTileBaseUrl;
     }
 
     this.loadMapTiles();
@@ -64,59 +65,10 @@ Page({
     const tiles = this.buildTiles();
 
     this.tileLoadFailed = false;
-    this.loadedTileCount = 0;
     this.setData({
       tiles,
-      tileLoadedCount: 0,
+      tileLoadedCount: tiles.length,
       tileTotalCount: tiles.length
-    });
-
-    this.downloadTiles(tiles);
-  },
-
-  async downloadTiles(tiles) {
-    const token = wx.getStorageSync('token');
-
-    for (let index = 0; index < tiles.length; index += 1) {
-      const tile = tiles[index];
-      try {
-        const filePath = await this.requestTileFile(tile, token);
-        this.loadedTileCount += 1;
-        this.setData({
-          [`tiles[${index}].url`]: filePath,
-          tileLoadedCount: this.loadedTileCount
-        });
-      } catch (err) {
-        console.error('加载停车地图瓦片失败:', tile, err);
-        this.showTileLoadError();
-      }
-    }
-  },
-
-  requestTileFile(tile, token) {
-    return new Promise((resolve, reject) => {
-      wx.request({
-        url: tile.remoteUrl,
-        method: 'GET',
-        responseType: 'arraybuffer',
-        header: token ? { Authorization: token } : {},
-        timeout: 10000,
-        success: (res) => {
-          if (res.statusCode !== 200 || !res.data || !res.data.byteLength) {
-            reject({ statusCode: res.statusCode, dataLength: (res.data && res.data.byteLength) || 0 });
-            return;
-          }
-
-          const filePath = `${wx.env.USER_DATA_PATH}/parking_tile_${tile.key}.png`;
-          wx.getFileSystemManager().writeFile({
-            filePath,
-            data: res.data,
-            success: () => resolve(filePath),
-            fail: reject
-          });
-        },
-        fail: reject
-      });
     });
   },
 
@@ -132,8 +84,7 @@ Page({
           y: row === 0 ? 0 : row * this.data.tileHeight - this.data.tileOverlap,
           width: this.data.tileWidth + (col === 0 ? 0 : this.data.tileOverlap),
           height: this.data.tileHeight + (row === 0 ? 0 : this.data.tileOverlap),
-          remoteUrl: `${this.mapImageBaseUrl}/parking/maps/local-tile/${row}/${col}?v=202605201`,
-          url: ''
+          url: `${this.mapTileBaseUrl}/tile_${row}_${col}.png`
         });
       }
     }

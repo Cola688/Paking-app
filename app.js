@@ -1,4 +1,5 @@
 const api = require('./utils/api.js');
+const { MAP_TILE_BASE_URL } = require('./utils/config.js');
 
 const getBaseUrl = () => {
   try {
@@ -16,6 +17,7 @@ App({
     userInfo: null,
     hasLogin: false,
     baseUrl: getBaseUrl(),
+    mapTileBaseUrl: MAP_TILE_BASE_URL,
     amapWebServiceKey: 'e018a4fa55aff32bfe8f3ef8f1eaa2ec',
     currentLocation: null
   },
