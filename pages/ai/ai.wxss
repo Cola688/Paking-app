@@ -98,16 +98,51 @@
 .typing {
   display: flex;
   align-items: center;
-  gap: 8rpx;
-  min-width: 110rpx;
-  min-height: 62rpx;
+  min-width: 168rpx;
+  min-height: 44rpx;
+  color: #64748b;
+  font-size: 26rpx;
+  line-height: 1.6;
 }
 
 .typing-dot {
-  width: 12rpx;
-  height: 12rpx;
-  border-radius: 50%;
-  background: #94a3b8;
+  opacity: 0;
+}
+
+.typing-dot-first {
+  opacity: 1;
+}
+
+.typing-dot-second {
+  animation: typingDotSecond 1.2s steps(1, end) infinite;
+}
+
+.typing-dot-third {
+  animation: typingDotThird 1.2s steps(1, end) infinite;
+}
+
+@keyframes typingDotSecond {
+  0%,
+  32% {
+    opacity: 0;
+  }
+
+  33%,
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes typingDotThird {
+  0%,
+  65% {
+    opacity: 0;
+  }
+
+  66%,
+  100% {
+    opacity: 1;
+  }
 }
 
 .ai-card-list {

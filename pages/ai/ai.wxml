@@ -23,9 +23,10 @@
         <view class="bubble {{item.cards && item.cards.length ? 'has-cards' : ''}}">
           <text wx:if="{{item.text}}" class="message-text">{{item.text}}</text>
           <view wx:elif="{{item.streaming}}" class="typing">
-            <view class="typing-dot"></view>
-            <view class="typing-dot"></view>
-            <view class="typing-dot"></view>
+            <text class="typing-label">思考中</text>
+            <text class="typing-dot typing-dot-first">。</text>
+            <text class="typing-dot typing-dot-second">。</text>
+            <text class="typing-dot typing-dot-third">。</text>
           </view>
 
           <view wx:if="{{item.cards && item.cards.length}}" class="ai-card-list">
