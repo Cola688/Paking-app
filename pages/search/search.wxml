@@ -60,7 +60,7 @@
         <view class="address">{{item.address}}</view>
         <view class="meta-row">
           <text>{{item.distance}}</text>
-          <text>剩余/错峰 {{item.available}}/{{item.total}}</text>
+          <text>剩余/错峰 {{item.available}}/{{item.offPeakTotal}}</text>
           <text>¥{{item.price}}/时</text>
         </view>
       </view>

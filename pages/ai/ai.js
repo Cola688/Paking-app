@@ -11,6 +11,12 @@ const QUICK_PROMPTS = [
 
 const MAX_CONTEXT_MESSAGES = 12;
 
+const SPOT_LOCATION_TYPE_TEXT = {
+  1: '立体车库',
+  2: '地面',
+  3: '地下'
+};
+
 Page({
   data: {
     inputValue: '',
@@ -281,7 +287,10 @@ Page({
     const tags = [];
 
     this.pushRow(rows, '剩余车位', this.formatCount(item.remainingSpotCount ?? item.availableSpots ?? item.available, '个'));
-    this.pushRow(rows, '错峰车位', this.formatCount(item.offPeakSpotCount ?? item.total, '个'));
+    this.pushRow(rows, '总车位', this.formatCount(item.total ?? item.totalSpotCount, '个'));
+    this.pushRow(rows, '居民已停车', this.formatCount(item.residentParkedSpotCount, '个'));
+    this.pushRow(rows, '错峰车位', this.formatCount(item.offPeakSpotCount ?? item.sharedSpotCount, '个'));
+    this.pushRow(rows, '车位位置', this.formatSpotLocationType(item.spotLocationType));
     this.pushRow(rows, '价格', this.formatPrice(item.price, item.priceUnit));
     this.pushRow(rows, '月租', this.formatPrice(item.monthlyPrice, '月'));
     this.pushRow(rows, '营业', item.businessHours);
@@ -353,11 +362,20 @@ Page({
 
   formatShareCount(item) {
     const remaining = item.remainingSpotCount ?? item.availableSpots ?? item.available ?? item.sharedSpotCount;
-    const offPeak = item.offPeakSpotCount ?? item.total ?? item.totalSpotCount;
+    const offPeak = item.offPeakSpotCount ?? item.sharedSpotCount;
     if (!this.isPresent(remaining) || !this.isPresent(offPeak)) {
       return '';
     }
     return `${remaining || 0}/${offPeak || 0}个`;
+  },
+
+  formatSpotLocationType(value) {
+    if (value && typeof value === 'object' && typeof value.label === 'string' && value.label) {
+      return value.label;
+    }
+
+    const rawValue = value && typeof value === 'object' && 'value' in value ? value.value : value;
+    return SPOT_LOCATION_TYPE_TEXT[Number(rawValue)] || '';
   },
 
   formatDateTime(value) {

@@ -67,7 +67,7 @@
         <text class="stat-label">剩余车位</text>
       </view>
       <view class="stat-item">
-        <text class="stat-value">{{selectedPark.total}}</text>
+        <text class="stat-value">{{selectedPark.offPeakTotal}}</text>
         <text class="stat-label">错峰车位</text>
       </view>
       <view class="stat-item">

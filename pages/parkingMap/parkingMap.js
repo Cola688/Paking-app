@@ -99,7 +99,8 @@ Page({
         return [];
       }
 
-      const total = Math.max(this.toNumber(item.offPeakSpotCount ?? item.total ?? item.totalSpotCount) || 0, 0);
+      const total = Math.max(this.toNumber(item.total ?? item.totalSpotCount) || 0, 0);
+      const offPeakTotal = Math.max(this.toNumber(item.offPeakSpotCount ?? item.sharedSpotCount) || 0, 0);
       const available = Math.max(this.toNumber(item.remainingSpotCount ?? item.available ?? item.sharedSpotCount) || 0, 0);
       const latitude = this.toNumber(item.latitude);
       const longitude = this.toNumber(item.longitude);
@@ -110,11 +111,12 @@ Page({
         latitude,
         longitude,
         total,
+        offPeakTotal,
         available,
         price: this.toNumber(item.price) || 0,
         mapPointX,
         mapPointY,
-        color: this.getMarkerColor(available, total)
+        color: this.getMarkerColor(available, offPeakTotal)
       };
       const position = this.resolveMarkerPosition(marker);
 
@@ -136,9 +138,9 @@ Page({
     return Number.isFinite(numberValue) ? numberValue : null;
   },
 
-  getMarkerColor(available, total) {
+  getMarkerColor(available, offPeakTotal) {
     if (available <= 0) return '#ff4d4f';
-    if (total > 0 && available / total <= 0.2) return '#fa8c16';
+    if (offPeakTotal > 0 && available / offPeakTotal <= 0.2) return '#fa8c16';
     return '#1677ff';
   },
 
@@ -173,13 +175,13 @@ Page({
 
   getStatusText(park) {
     if (park.available <= 0) return '已满';
-    if (park.total > 0 && park.available / park.total <= 0.2) return '紧张';
+    if (park.offPeakTotal > 0 && park.available / park.offPeakTotal <= 0.2) return '紧张';
     return '空闲';
   },
 
   getStatusClass(park) {
     if (park.available <= 0) return 'full';
-    if (park.total > 0 && park.available / park.total <= 0.2) return 'busy';
+    if (park.offPeakTotal > 0 && park.available / park.offPeakTotal <= 0.2) return 'busy';
     return 'available';
   },
 
