@@ -95,19 +95,46 @@
   white-space: pre-wrap;
 }
 
-.typing {
+.thinking {
   display: flex;
   align-items: center;
-  gap: 8rpx;
-  min-width: 110rpx;
-  min-height: 62rpx;
+  gap: 4rpx;
+  min-width: 130rpx;
+  min-height: 52rpx;
 }
 
-.typing-dot {
-  width: 12rpx;
-  height: 12rpx;
-  border-radius: 50%;
-  background: #94a3b8;
+.thinking-text {
+  color: #64748b;
+  font-size: 26rpx;
+}
+
+.thinking-dots {
+  display: flex;
+  align-items: flex-end;
+  gap: 2rpx;
+}
+
+.thinking-dot {
+  color: #94a3b8;
+  font-size: 28rpx;
+  font-weight: 700;
+  line-height: 1;
+  animation: bounce 1.4s ease-in-out infinite;
+}
+
+.thinking-dot.d1 { animation-delay: 0s; }
+.thinking-dot.d2 { animation-delay: 0.2s; }
+.thinking-dot.d3 { animation-delay: 0.4s; }
+
+@keyframes bounce {
+  0%, 80%, 100% {
+    transform: translateY(0);
+    opacity: 0.3;
+  }
+  40% {
+    transform: translateY(-12rpx);
+    opacity: 1;
+  }
 }
 
 .ai-card-list {

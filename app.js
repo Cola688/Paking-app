@@ -1,4 +1,5 @@
 const api = require('./utils/api.js');
+const { MAP_TILE_BASE_URL } = require('./utils/config.js');
 
 const getBaseUrl = () => 'http://122.51.76.194:7003/app/api/v1';
 
@@ -7,6 +8,7 @@ App({
     userInfo: null,
     hasLogin: false,
     baseUrl: getBaseUrl(),
+    mapTileBaseUrl: MAP_TILE_BASE_URL,
     amapWebServiceKey: 'e018a4fa55aff32bfe8f3ef8f1eaa2ec',
     currentLocation: null
   },
