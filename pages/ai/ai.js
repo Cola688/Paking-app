@@ -3,6 +3,8 @@ const api = require('../../utils/api.js');
 const amap = require('../../utils/amap.js');
 
 const QUICK_PROMPTS = [
+  '停车联盟是什么？',
+  '停车联盟怎么使用？',
   '帮我找附近可预约车位',
   '共享申请怎么提交',
   '怎么导航到停车场',
