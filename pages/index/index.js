@@ -167,7 +167,8 @@ Page({
     const latitude = this.toNumber(item.latitude)
     const longitude = this.toNumber(item.longitude)
     const available = Math.max(this.toNumber(item.remainingSpotCount ?? item.available ?? item.sharedSpotCount) || 0, 0)
-    const total = Math.max(this.toNumber(item.offPeakSpotCount ?? item.total ?? item.totalSpotCount) || 0, 0)
+    const total = Math.max(this.toNumber(item.total ?? item.totalSpotCount) || 0, 0)
+    const offPeakTotal = Math.max(this.toNumber(item.offPeakSpotCount ?? item.sharedSpotCount) || 0, 0)
     const distanceValue = latitude !== null && longitude !== null
       ? this.getDistance(location.latitude, location.longitude, latitude, longitude)
       : Number.MAX_SAFE_INTEGER
@@ -182,6 +183,7 @@ Page({
       distanceValue,
       available,
       total,
+      offPeakTotal,
       latitude,
       longitude,
       price: this.toNumber(item.price) || 0,

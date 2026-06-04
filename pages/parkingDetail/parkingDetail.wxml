@@ -15,8 +15,20 @@
 
   <view class="info-card">
     <view class="info-row">
-      <text class="info-label">可提供错峰车位数</text>
+      <text class="info-label">总车位数</text>
       <text class="info-value">{{parkingInfo.totalSpaces}}个</text>
+    </view>
+    <view class="info-row">
+      <text class="info-label">居民已停车位数</text>
+      <text class="info-value">{{parkingInfo.residentParkedSpaces}}个</text>
+    </view>
+    <view class="info-row">
+      <text class="info-label">车位位置类型</text>
+      <text class="info-value">{{parkingInfo.spotLocationTypeText}}</text>
+    </view>
+    <view class="info-row">
+      <text class="info-label">可提供错峰车位数</text>
+      <text class="info-value">{{parkingInfo.offPeakSpaces}}个</text>
     </view>
     <view class="info-row">
       <text class="info-label">剩余车位</text>

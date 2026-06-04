@@ -73,7 +73,7 @@
           <view class="card-footer">
             <view class="detail-info">
               <text class="price">¥{{item.price}} /小时</text>
-              <text class="space-count">剩余/错峰: {{item.available}}/{{item.total}}</text>
+              <text class="space-count">剩余/错峰: {{item.available}}/{{item.offPeakTotal}}</text>
             </view>
             <view class="go-btn" catchtap="handleGoParking" data-id="{{item.id}}">导航到这</view>
           </view>
