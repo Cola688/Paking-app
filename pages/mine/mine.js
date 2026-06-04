@@ -1,26 +1,18 @@
 const api = require('../../utils/api.js');
 
-const DEFAULT_VEHICLES = [
-  { id: 'default-1', plateNumber: '沪A·123F5' },
-  { id: 'default-2', plateNumber: '沪B·678DF' }
-];
-
 Page({
   data: {
-    address: '延长路99弄维宸苑9号301室',
+    address: '',
     avatarUrl: '/images/avatar-default.png',
     displayName: '点击登录',
     hasUserInfo: false,
-    invoices: [
-      { amount: '120.00', id: 'invoice-1', title: '2025年7月停车费发票' },
-      { amount: '180.50', id: 'invoice-2', title: '2025年8月停车费发票' }
-    ],
     phoneMasked: '未绑定',
     shareApplications: [],
     shareApplicationsLoaded: false,
     userInfo: null,
     userLevel: '登录后享受更多服务',
-    vehicles: DEFAULT_VEHICLES
+    vehicles: [],
+    vehiclesLoaded: false
   },
 
   onLoad(options) {
@@ -38,6 +30,24 @@ Page({
     this.checkLogin();
     this.loadVehicles();
     this.loadShareApplications();
+    this.loadUserProfile();
+  },
+
+  async loadUserProfile() {
+    const token = wx.getStorageSync('token');
+    if (!token) return;
+
+    try {
+      const res = await api.getUserInfo();
+      const info = res?.data || {};
+      const rawPhone = info.phone || '';
+      this.setData({
+        address: info.contactAddress || '',
+        phoneMasked: this.maskPhone(rawPhone)
+      });
+    } catch (err) {
+      console.error('加载用户资料失败:', err);
+    }
   },
 
   checkLogin() {
@@ -57,11 +67,27 @@ Page({
     });
   },
 
-  loadVehicles() {
-    const storedVehicles = wx.getStorageSync('vehicles');
-    this.setData({
-      vehicles: Array.isArray(storedVehicles) && storedVehicles.length > 0 ? storedVehicles : DEFAULT_VEHICLES
-    });
+  async loadVehicles() {
+    const token = wx.getStorageSync('token');
+    if (!token) {
+      this.setData({ vehicles: [], vehiclesLoaded: true });
+      return;
+    }
+
+    try {
+      const res = await api.getUserPlates({ pageNum: 1, pageSize: 10 });
+      const records = res?.data?.records || res?.records || [];
+      const vehicles = records.map(item => ({
+        id: item.id,
+        plateNumber: item.plateNumber,
+        plateColor: item.plateColor,
+        isDefault: item.isDefault
+      }));
+      this.setData({ vehicles, vehiclesLoaded: true });
+    } catch (err) {
+      console.error('加载车辆失败:', err);
+      this.setData({ vehicles: [], vehiclesLoaded: true });
+    }
   },
 
   async loadShareApplications() {
@@ -150,18 +176,40 @@ Page({
   },
 
   deleteVehicle(e) {
-    const id = String(e.currentTarget.dataset.id);
-    const vehicles = this.data.vehicles.filter(item => item.id !== id);
-    this.setData({ vehicles });
-    wx.setStorageSync('vehicles', vehicles);
+    const id = e.currentTarget.dataset.id;
+    const vehicle = this.data.vehicles.find(v => v.id == id);
+    if (!vehicle) return;
+
+    wx.showModal({
+      title: '确认解绑',
+      content: `确定要解绑车辆 ${vehicle.plateNumber} 吗？`,
+      confirmColor: '#d33b3b',
+      success: async (res) => {
+        if (!res.confirm) return;
+
+        try {
+          await api.unbindUserPlate(id);
+          wx.showToast({ title: '解绑成功', icon: 'success' });
+          this.loadVehicles();
+        } catch (err) {
+          console.error('解绑失败:', err);
+          wx.showToast({ title: err?.data?.msg || err?.data?.message || '解绑失败', icon: 'none' });
+        }
+      }
+    });
   },
 
   goToShareApply() {
     wx.navigateTo({ url: '/pages/shareApply/shareApply' });
   },
 
-  applyInvoice() {
-    wx.showToast({ title: '开票申请已记录', icon: 'success' });
+  goToInfoEdit() {
+    const token = wx.getStorageSync('token');
+    if (!token) {
+      wx.showToast({ title: '请先登录', icon: 'none' });
+      return;
+    }
+    wx.navigateTo({ url: '/pages/mine/infoEdit/infoEdit' });
   },
 
   goToRecord() {

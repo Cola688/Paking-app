@@ -1,4 +1,4 @@
-const BASE_URL = 'http://122.51.76.194:7003/app/api/v1';
+const BASE_URL = 'http://127.0.0.1:7003/app/api/v1';
 
 const getDefaultBaseUrl = () => BASE_URL;
 
@@ -402,6 +402,14 @@ module.exports = {
     return request.get('/auth/user/info');
   },
 
+  updateUserInfo(data) {
+    return request.post('/auth/user/info', data);
+  },
+
+  bindPhone(phone, code) {
+    return request.post('/auth/user/bind-phone', { phone, code });
+  },
+
   refreshToken() {
     try {
       const refreshToken = wx.getStorageSync('refreshToken');
@@ -497,5 +505,29 @@ module.exports = {
       format,
       sampleRate
     });
+  },
+
+  /** 车辆/车牌管理 */
+
+  getUserPlates(params = {}) {
+    return request.get('/user/plates', params);
+  },
+
+  /** 小区 */
+
+  getCommunities() {
+    return request.get('/communities');
+  },
+
+  bindUserPlate(data) {
+    return request.post('/user/plates', data);
+  },
+
+  updateUserPlate(id, data) {
+    return request.put(`/user/plates/${id}`, data);
+  },
+
+  unbindUserPlate(id) {
+    return request.delete(`/user/plates/${id}`);
   }
 };

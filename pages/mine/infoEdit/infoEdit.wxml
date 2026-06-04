@@ -1,0 +1,110 @@
+<view class="container">
+  <navbar title="个人信息" showBack="{{true}}" />
+
+  <view class="content">
+    <!-- 头像 -->
+    <view class="section-card">
+      <view class="avatar-row" bindtap="onChangeAvatar">
+        <text class="row-label">头像</text>
+        <view class="avatar-right">
+          <image class="avatar-img" src="{{form.avatarUrl || '/images/avatar-default.png'}}" mode="aspectFill" />
+          <text class="row-arrow">›</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 基本信息 -->
+    <view class="section-card">
+      <view class="edit-row">
+        <text class="row-label">昵称</text>
+        <input
+          class="row-input"
+          placeholder="请输入昵称"
+          placeholder-class="row-placeholder"
+          value="{{form.nickname}}"
+          bindinput="onInputField"
+          data-field="nickname"
+        />
+      </view>
+      <view class="edit-row">
+        <text class="row-label">真实姓名</text>
+        <input
+          class="row-input"
+          placeholder="请输入真实姓名"
+          placeholder-class="row-placeholder"
+          value="{{form.realName}}"
+          bindinput="onInputField"
+          data-field="realName"
+        />
+      </view>
+      <view class="edit-row">
+        <text class="row-label">联系地址</text>
+        <input
+          class="row-input"
+          placeholder="请输入联系地址"
+          placeholder-class="row-placeholder"
+          value="{{form.contactAddress}}"
+          bindinput="onInputField"
+          data-field="contactAddress"
+        />
+      </view>
+      <view class="edit-row no-border" wx:if="{{!showBindPhone}}">
+        <text class="row-label">手机号</text>
+        <view class="phone-right" bindtap="onTapPhone">
+          <text class="row-value {{form.phone ? '' : 'row-value--muted'}}">{{form.phone || '未绑定，点击绑定'}}</text>
+          <text class="row-arrow">›</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 保存按钮 -->
+    <view class="save-btn {{saving ? 'save-btn--loading' : ''}}" bindtap="onSave">
+      {{saving ? '保存中...' : '保存'}}
+    </view>
+  </view>
+
+  <!-- 绑定手机号弹窗 -->
+  <view class="modal-mask" wx:if="{{showBindPhone}}" catchtouchmove="noop" bindtap="onCancelBind">
+    <view class="modal-dialog" catchtap="noop">
+      <view class="modal-title">绑定手机号</view>
+
+      <view class="modal-field">
+        <text class="modal-label">手机号</text>
+        <input
+          class="modal-input"
+          type="number"
+          maxlength="11"
+          placeholder="请输入手机号"
+          placeholder-class="modal-placeholder"
+          value="{{bindForm.phone}}"
+          bindinput="onBindField"
+          data-field="phone"
+        />
+      </view>
+
+      <view class="modal-field">
+        <text class="modal-label">验证码</text>
+        <input
+          class="modal-input modal-input--code"
+          type="number"
+          maxlength="6"
+          placeholder="请输入验证码"
+          placeholder-class="modal-placeholder"
+          value="{{bindForm.code}}"
+          bindinput="onBindField"
+          data-field="code"
+        />
+        <view class="sms-btn {{smsCountdown > 0 ? 'sms-btn--disabled' : ''}}" bindtap="onSendSms">
+          {{smsCountdown > 0 ? smsCountdown + 's' : '获取验证码'}}
+        </view>
+      </view>
+
+      <view class="modal-actions">
+        <view class="modal-cancel" bindtap="onCancelBind">取消</view>
+        <view class="modal-confirm {{binding ? 'modal-confirm--loading' : ''}}" bindtap="onConfirmBind">
+          {{binding ? '绑定中...' : '确认'}}
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

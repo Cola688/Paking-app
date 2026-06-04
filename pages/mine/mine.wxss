@@ -169,6 +169,13 @@
   font-size: 27rpx;
 }
 
+.vehicle-empty {
+  padding: 24rpx 0 0;
+  color: #8a96a8;
+  font-size: 25rpx;
+  text-align: center;
+}
+
 .add-icon {
   margin-right: 10rpx;
   color: #245d9f;
@@ -185,6 +192,20 @@
   font-size: 25rpx;
   font-weight: 600;
   line-height: 54rpx;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.edit-pill {
+  min-width: 110rpx;
+  height: 48rpx;
+  padding: 0 20rpx;
+  border-radius: 999rpx;
+  background: #ecf3fc;
+  color: #245d9f;
+  font-size: 23rpx;
+  font-weight: 600;
+  line-height: 48rpx;
   text-align: center;
   box-sizing: border-box;
 }
@@ -256,37 +277,3 @@
   text-align: center;
 }
 
-.invoice-card {
-  padding-bottom: 34rpx;
-}
-
-.invoice-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 28rpx 0;
-  border-bottom: 1rpx solid #edf1f7;
-}
-
-.invoice-title {
-  color: #26364a;
-  font-size: 26rpx;
-}
-
-.invoice-amount {
-  color: #17385f;
-  font-size: 28rpx;
-  font-weight: 700;
-}
-
-.invoice-button {
-  width: 170rpx;
-  height: 62rpx;
-  margin-top: 28rpx;
-  border-radius: 999rpx;
-  background: #245d9f;
-  color: #fff;
-  font-size: 27rpx;
-  line-height: 62rpx;
-  text-align: center;
-}

@@ -1,14 +1,88 @@
 <view class="container">
   <navbar title="我的车辆" />
 
-  <view class="car-list">
-    <view class="car-item" wx:for="{{cars}}" wx:key="id">
-      <view class="car-info">
-        <view class="car-plate">{{item.plateNumber}}</view>
-        <view class="car-type">{{item.type}}</view>
+  <view class="content">
+    <!-- loading -->
+    <view class="state-wrapper" wx:if="{{loading}}">
+      <text class="state-text">加载中...</text>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="state-wrapper" wx:elif="{{empty}}">
+      <view class="empty-icon">🚗</view>
+      <text class="state-text">暂无绑定车辆</text>
+      <text class="state-hint">绑定车辆后可在停车时自动识别</text>
+    </view>
+
+    <!-- 车辆列表 -->
+    <view class="car-list" wx:else>
+      <view class="car-card" wx:for="{{cars}}" wx:key="id">
+        <view class="car-left">
+          <view class="plate-box color-{{item.plateColor}}">
+            <text class="plate-text">{{item.plateNumber}}</text>
+            <text class="plate-tag">{{item.colorLabel}}</text>
+          </view>
+          <text class="default-tag" wx:if="{{item.isDefault}}">默认</text>
+        </view>
+        <view class="car-actions">
+          <view class="action-btn edit-btn" catchtap="openEditForm" data-id="{{item.id}}">编辑</view>
+          <view class="action-btn del-btn" catchtap="unbindCar" data-id="{{item.id}}">解绑</view>
+        </view>
       </view>
-      <view class="car-action" catchtap="editCar" data-id="{{item.id}}">编辑</view>
+    </view>
+
+    <!-- 底部绑定按钮 -->
+    <view class="bottom-bar">
+      <button class="bind-btn" bindtap="openAddForm">＋ 绑定车辆</button>
     </view>
   </view>
-  <button class="add-btn" bindtap="addCar">添加车辆</button>
+
+  <!-- 绑定/编辑弹窗 -->
+  <view class="mask" wx:if="{{showForm}}" catchtap="closeForm">
+    <view class="form-modal" catchtap="stopPropagation">
+      <view class="form-header">
+        <text class="form-title">{{formTitle}}</text>
+        <text class="form-close" bindtap="closeForm">✕</text>
+      </view>
+
+      <view class="form-body">
+        <!-- 车牌号输入 -->
+        <view class="form-group">
+          <text class="form-label">车牌号</text>
+          <input
+            class="plate-input"
+            value="{{plateNumber}}"
+            placeholder="例如：沪A12345"
+            maxlength="8"
+            bindinput="onPlateInput"
+          />
+        </view>
+
+        <!-- 车牌颜色选择 -->
+        <view class="form-group">
+          <text class="form-label">车牌颜色</text>
+          <view class="color-options">
+            <view
+              class="color-option {{colorActiveIndex === index ? 'active' : ''}}"
+              wx:for="{{plateColors}}"
+              wx:key="value"
+              wx:for-index="index"
+              data-index="{{index}}"
+              bindtap="selectColor"
+            >
+              <view class="color-dot color-dot-{{item.value}}"></view>
+              <text>{{item.label}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view class="form-footer">
+        <button class="btn-cancel" bindtap="closeForm">取消</button>
+        <button class="btn-confirm" bindtap="handleSubmit" loading="{{submitting}}" disabled="{{submitting}}">
+          {{submitting ? '提交中...' : '确定'}}
+        </button>
+      </view>
+    </view>
+  </view>
 </view>

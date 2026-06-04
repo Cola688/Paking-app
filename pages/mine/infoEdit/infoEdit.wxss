@@ -1,0 +1,233 @@
+.container {
+  min-height: 100vh;
+  background: #f5f9ff;
+  padding-bottom: 150rpx;
+}
+
+.content {
+  padding: 22rpx 30rpx 36rpx;
+}
+
+.section-card {
+  margin-top: 24rpx;
+  padding: 0 34rpx 34rpx;
+  border-radius: 14rpx;
+  background: #fff;
+  box-shadow: 0 8rpx 26rpx rgba(15, 23, 42, 0.06);
+  box-sizing: border-box;
+}
+
+/* 头像行 */
+.avatar-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28rpx 0;
+}
+
+.avatar-right {
+  display: flex;
+  align-items: center;
+}
+
+.avatar-img {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 50%;
+  background: #edf1f7;
+}
+
+.row-arrow {
+  margin-left: 12rpx;
+  color: #c0c6cf;
+  font-size: 36rpx;
+  font-weight: 300;
+}
+
+/* 编辑行 */
+.edit-row {
+  display: flex;
+  align-items: center;
+  min-height: 96rpx;
+  border-bottom: 1rpx solid #edf1f7;
+  box-sizing: border-box;
+}
+
+.edit-row.no-border {
+  border-bottom: none;
+}
+
+.row-label {
+  width: 150rpx;
+  flex-shrink: 0;
+  color: #26364a;
+  font-size: 28rpx;
+  font-weight: 500;
+}
+
+.row-input {
+  flex: 1;
+  min-width: 0;
+  color: #26364a;
+  font-size: 28rpx;
+  text-align: right;
+}
+
+
+.row-placeholder {
+  color: #b0bacc;
+}
+
+.row-value {
+  color: #26364a;
+  font-size: 28rpx;
+}
+
+.row-value--muted {
+  color: #b0bacc;
+}
+
+.phone-right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* 短信验证码按钮 */
+.sms-btn {
+  flex-shrink: 0;
+  height: 58rpx;
+  padding: 0 18rpx;
+  border-radius: 999rpx;
+  background: #245d9f;
+  color: #fff;
+  font-size: 23rpx;
+  line-height: 58rpx;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.sms-btn--disabled {
+  background: #b0bacc;
+  color: #fff;
+}
+
+/* ========== 绑定手机号弹窗 ========== */
+.modal-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-dialog {
+  width: 600rpx;
+  border-radius: 18rpx;
+  background: #fff;
+  padding: 44rpx 40rpx 36rpx;
+  box-sizing: border-box;
+}
+
+.modal-title {
+  color: #17385f;
+  font-size: 34rpx;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 36rpx;
+}
+
+.modal-field {
+  display: flex;
+  align-items: center;
+  min-height: 88rpx;
+  padding: 14rpx 0;
+  border-bottom: 1rpx solid #edf1f7;
+}
+
+.modal-label {
+  width: 120rpx;
+  flex-shrink: 0;
+  color: #26364a;
+  font-size: 27rpx;
+  font-weight: 500;
+}
+
+.modal-input {
+  flex: 1;
+  min-width: 0;
+  height: 72rpx;
+  border-radius: 8rpx;
+  background: #f5f7fa;
+  padding: 0 18rpx;
+  color: #26364a;
+  font-size: 27rpx;
+  box-sizing: border-box;
+}
+
+.modal-input--code {
+  flex: none;
+  width: 180rpx;
+}
+
+.modal-placeholder {
+  color: #b0bacc;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 40rpx;
+}
+
+.modal-cancel {
+  flex: 1;
+  height: 78rpx;
+  border-radius: 999rpx;
+  background: #f0f2f7;
+  color: #617086;
+  font-size: 28rpx;
+  line-height: 78rpx;
+  text-align: center;
+  margin-right: 20rpx;
+}
+
+.modal-confirm {
+  flex: 1;
+  height: 78rpx;
+  border-radius: 999rpx;
+  background: #245d9f;
+  color: #fff;
+  font-size: 28rpx;
+  font-weight: 600;
+  line-height: 78rpx;
+  text-align: center;
+}
+
+.modal-confirm--loading {
+  opacity: 0.7;
+}
+
+/* 保存按钮 */
+.save-btn {
+  height: 92rpx;
+  margin-top: 60rpx;
+  border-radius: 14rpx;
+  background: linear-gradient(135deg, #245d9f 0%, #4779c3 100%);
+  box-shadow: 0 10rpx 28rpx rgba(0, 31, 128, 0.16);
+  color: #fff;
+  font-size: 31rpx;
+  font-weight: 700;
+  line-height: 92rpx;
+  text-align: center;
+}
+
+.save-btn--loading {
+  opacity: 0.7;
+}

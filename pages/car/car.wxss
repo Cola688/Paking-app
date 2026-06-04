@@ -1,7 +1,316 @@
-.container { min-height: 100vh; background: #f5f5f5; padding: calc(20rpx + 88rpx) 30rpx 20rpx; }
-.car-list { display: flex; flex-direction: column; gap: 20rpx; margin-bottom: 40rpx; }
-.car-item { background: #fff; padding: 30rpx; border-radius: 12rpx; display: flex; justify-content: space-between; align-items: center; }
-.car-plate { font-size: 36rpx; font-weight: bold; color: #333; margin-bottom: 8rpx; }
-.car-type { font-size: 24rpx; color: #666; }
-.car-action { color: #1989fa; font-size: 28rpx; }
-.add-btn { background: #1989fa; color: #fff; border-radius: 44rpx; height: 88rpx; line-height: 88rpx; }
+.container {
+  min-height: 100vh;
+  background: #f5f9ff;
+  padding-bottom: 180rpx;
+}
+
+.content {
+  padding: 24rpx 30rpx 36rpx;
+}
+
+/* ---------- 状态提示 ---------- */
+.state-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 120rpx 40rpx 40rpx;
+}
+
+.empty-icon {
+  font-size: 80rpx;
+  margin-bottom: 24rpx;
+}
+
+.state-text {
+  color: #617086;
+  font-size: 28rpx;
+  margin-bottom: 10rpx;
+}
+
+.state-hint {
+  color: #8a96a8;
+  font-size: 24rpx;
+}
+
+/* ---------- 车辆卡片 ---------- */
+.car-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.car-card {
+  background: #fff;
+  padding: 32rpx 28rpx;
+  border-radius: 14rpx;
+  box-shadow: 0 6rpx 22rpx rgba(15, 23, 42, 0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.car-left {
+  display: flex;
+  align-items: center;
+  gap: 18rpx;
+  flex: 1;
+  min-width: 0;
+}
+
+.plate-box {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  padding: 12rpx 24rpx;
+  border-radius: 8rpx;
+  min-width: 200rpx;
+}
+
+.plate-box.color-1 { background: #edf7ff; }
+.plate-box.color-2 { background: #ecfdf3; }
+.plate-box.color-3 { background: #fffbe6; }
+.plate-box.color-4 { background: #f0f2f5; }
+.plate-box.color-5 { background: #fafafa; }
+
+.plate-text {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #17385f;
+  letter-spacing: 2rpx;
+}
+
+.plate-tag {
+  font-size: 20rpx;
+  color: #fff;
+  padding: 4rpx 12rpx;
+  border-radius: 4rpx;
+  flex-shrink: 0;
+}
+
+.plate-box.color-1 .plate-tag { background: #245d9f; }
+.plate-box.color-2 .plate-tag { background: #16a05d; }
+.plate-box.color-3 .plate-tag { background: #d89614; }
+.plate-box.color-4 .plate-tag { background: #617086; }
+.plate-box.color-5 .plate-tag { background: #26364a; }
+
+.default-tag {
+  font-size: 20rpx;
+  color: #245d9f;
+  background: #ecf3fc;
+  padding: 4rpx 14rpx;
+  border-radius: 999rpx;
+  flex-shrink: 0;
+}
+
+/* ---------- 操作按钮 ---------- */
+.car-actions {
+  display: flex;
+  gap: 16rpx;
+  flex-shrink: 0;
+}
+
+.action-btn {
+  font-size: 24rpx;
+  padding: 10rpx 22rpx;
+  border-radius: 999rpx;
+}
+
+.edit-btn {
+  color: #245d9f;
+  background: #ecf3fc;
+}
+
+.del-btn {
+  color: #d33b3b;
+  background: #fff1f0;
+}
+
+/* ---------- 底部绑定按钮 ---------- */
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 24rpx 30rpx;
+  padding-bottom: calc(24rpx + env(safe-area-inset-bottom));
+  background: rgba(255,255,255,0.95);
+  box-shadow: 0 -4rpx 20rpx rgba(0,0,0,0.04);
+  box-sizing: border-box;
+}
+
+.bind-btn {
+  width: 100%;
+  height: 88rpx;
+  border-radius: 44rpx;
+  background: #245d9f;
+  color: #fff;
+  font-size: 30rpx;
+  font-weight: 600;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bind-btn::after {
+  border: none;
+}
+
+/* ---------- 弹窗 ---------- */
+.mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-modal {
+  width: 610rpx;
+  background: #fff;
+  border-radius: 18rpx;
+  overflow: hidden;
+}
+
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx 32rpx 10rpx;
+}
+
+.form-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #17385f;
+}
+
+.form-close {
+  font-size: 36rpx;
+  color: #8a96a8;
+  padding: 10rpx;
+}
+
+.form-body {
+  padding: 20rpx 32rpx 30rpx;
+}
+
+.form-group {
+  margin-top: 24rpx;
+}
+
+.form-label {
+  display: block;
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #26364a;
+  margin-bottom: 14rpx;
+}
+
+.plate-input {
+  width: 100%;
+  height: 82rpx;
+  border: 2rpx solid #e0e6f0;
+  border-radius: 10rpx;
+  padding: 0 22rpx;
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #17385f;
+  letter-spacing: 3rpx;
+  box-sizing: border-box;
+}
+
+.plate-input:focus {
+  border-color: #245d9f;
+}
+
+/* ---------- 颜色选择 ---------- */
+.color-options {
+  display: flex;
+  gap: 16rpx;
+}
+
+.color-option {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8rpx;
+  padding: 16rpx 8rpx;
+  border: 2rpx solid #e0e6f0;
+  border-radius: 10rpx;
+  font-size: 22rpx;
+  color: #617086;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.color-option.active {
+  border-color: #245d9f;
+  background: #f0f7ff;
+  color: #245d9f;
+}
+
+.color-dot {
+  width: 36rpx;
+  height: 36rpx;
+  border-radius: 10rpx;
+}
+
+.color-dot-1 { background: linear-gradient(135deg, #245d9f, #4a8cd4); }
+.color-dot-2 { background: linear-gradient(135deg, #16a05d, #4cd964); }
+.color-dot-3 { background: linear-gradient(135deg, #d89614, #f5a623); }
+.color-dot-4 { background: linear-gradient(135deg, #e8ecf0, #b0b8c4); }
+.color-dot-5 { background: linear-gradient(135deg, #26364a, #4a5568); }
+
+/* ---------- 弹窗底部按钮 ---------- */
+.form-footer {
+  display: flex;
+  gap: 24rpx;
+  padding: 24rpx 32rpx 32rpx;
+  border-top: 1rpx solid #edf1f7;
+}
+
+.btn-cancel {
+  flex: 1;
+  height: 80rpx;
+  border-radius: 44rpx;
+  background: #f5f6f8;
+  color: #617086;
+  font-size: 28rpx;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-cancel::after {
+  border: none;
+}
+
+.btn-confirm {
+  flex: 1;
+  height: 80rpx;
+  border-radius: 44rpx;
+  background: #245d9f;
+  color: #fff;
+  font-size: 28rpx;
+  font-weight: 600;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-confirm::after {
+  border: none;
+}
+
+.btn-confirm[disabled] {
+  opacity: 0.6;
+}

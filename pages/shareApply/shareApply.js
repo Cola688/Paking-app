@@ -6,6 +6,8 @@ const MAP_WORLD_HEIGHT = 7.07;
 const MAP_DISPLAY_WIDTH = 1404;
 const MAP_DISPLAY_HEIGHT = 993;
 
+const DEFAULT_PLATE_OPTION = { id: '', plateNumber: '手动输入车牌号' };
+
 Page({
   mapTileBaseUrl: MAP_TILE_BASE_URL,
 
@@ -14,14 +16,24 @@ Page({
     areaMarkerScale: 2,
     areaMapTiles: [],
     areasLoading: false,
-    files: [],
     form: {
       applicantName: '',
       areaAddress: '',
       areaName: '',
       phone: '',
-      plateNumber: ''
+      plateNumber: '',
+      detailAddress: '',
+      communityId: null
     },
+    // 车牌选择
+    plateOptions: [DEFAULT_PLATE_OPTION],
+    plateIndex: 0,         // 0 = 手动输入
+    useManualPlate: true,   // 是否手动输入
+    // 小区选择
+    communityList: [],
+    communityIndex: -1,
+    communityName: '',
+    // 地图
     mapAreaScaleMax: 2.6,
     mapAreaScaleMin: 0.5,
     mapAreaScaleValue: 0.5,
@@ -58,6 +70,76 @@ Page({
     });
     this.loadMapTiles();
     this.loadMapAreas();
+    this.loadUserPlates();
+    this.loadCommunities();
+  },
+
+  /** 加载用户车牌列表 */
+  async loadUserPlates() {
+    const token = wx.getStorageSync('token');
+    if (!token) return;
+
+    try {
+      const res = await api.getUserPlates({ pageNum: 1, pageSize: 50 });
+      const records = res?.data?.records || res?.records || [];
+      if (records.length > 0) {
+        const options = [DEFAULT_PLATE_OPTION, ...records.map(r => ({
+          id: r.id,
+          plateNumber: r.plateNumber
+        }))];
+        // 默认选中第一个车牌
+        this.setData({
+          plateOptions: options,
+          plateIndex: 1,
+          useManualPlate: false,
+          'form.plateNumber': records[0].plateNumber
+        });
+      }
+    } catch (err) {
+      console.error('加载用户车牌失败:', err);
+    }
+  },
+
+  /** 加载小区列表 */
+  async loadCommunities() {
+    try {
+      const res = await api.getCommunities();
+      const list = res?.data || [];
+      this.setData({ communityList: list });
+    } catch (err) {
+      console.error('加载小区列表失败:', err);
+    }
+  },
+
+  /** 车牌选择器变更 */
+  onPlateChange(e) {
+    const index = Number(e.detail.value);
+    const option = this.data.plateOptions[index];
+    if (index === 0 || !option.id) {
+      // 手动输入
+      this.setData({
+        plateIndex: 0,
+        useManualPlate: true,
+        'form.plateNumber': ''
+      });
+    } else {
+      this.setData({
+        plateIndex: index,
+        useManualPlate: false,
+        'form.plateNumber': option.plateNumber
+      });
+    }
+  },
+
+  /** 小区选择器变更 */
+  onCommunityChange(e) {
+    const index = Number(e.detail.value);
+    const community = this.data.communityList[index];
+    this.setData({
+      communityIndex: index,
+      'form.communityId': community ? community.id : null,
+      communityName: community ? community.name : ''
+    });
   },
 
   loadMapTiles() {
@@ -335,25 +417,6 @@ Page({
     });
   },
 
-  chooseFile() {
-    const remainCount = Math.max(1, 3 - this.data.files.length);
-    wx.chooseImage({
-      count: remainCount,
-      sizeType: ['compressed'],
-      sourceType: ['album', 'camera'],
-      success: (res) => {
-        const files = [...this.data.files, ...(res.tempFiles || [])].slice(0, 3);
-        this.setData({ files });
-      }
-    });
-  },
-
-  removeFile(e) {
-    const index = Number(e.currentTarget.dataset.index);
-    const files = this.data.files.filter((_, itemIndex) => itemIndex !== index);
-    this.setData({ files });
-  },
-
   toggleAgreement() {
     this.setData({ agreement: !this.data.agreement });
   },
@@ -373,7 +436,15 @@ Page({
       return;
     }
     if (!form.plateNumber.trim()) {
-      wx.showToast({ title: '请输入车牌号码', icon: 'none' });
+      wx.showToast({ title: '请选择或输入车牌号码', icon: 'none' });
+      return;
+    }
+    if (!form.detailAddress.trim()) {
+      wx.showToast({ title: '请输入详细地址', icon: 'none' });
+      return;
+    }
+    if (!form.communityId) {
+      wx.showToast({ title: '请选择所属小区', icon: 'none' });
       return;
     }
     if (!this.data.region[0]) {
@@ -382,10 +453,6 @@ Page({
     }
     if (!this.data.selectedArea || !form.areaName) {
       wx.showToast({ title: '请选择拟申请区域', icon: 'none' });
-      return;
-    }
-    if (this.data.files.length === 0) {
-      wx.showToast({ title: '请上传证明材料', icon: 'none' });
       return;
     }
     if (!this.data.agreement) {
@@ -418,17 +485,10 @@ Page({
       sharedAreaId: selectedArea.sharedAreaId,
       phone: form.phone.trim(),
       plateNumber: form.plateNumber.trim().toUpperCase(),
-      proofFileNames: this.getProofFileNames(),
+      detailAddress: form.detailAddress.trim(),
+      communityId: form.communityId,
       regionText: this.data.region.filter(Boolean).join(' ')
     };
-  },
-
-  getProofFileNames() {
-    return this.data.files.map((file, index) => {
-      const path = file.name || file.path || file.tempFilePath || '';
-      const parts = String(path).split('/');
-      return parts[parts.length - 1] || `证明材料${index + 1}`;
-    });
   },
 
   cancel() {

@@ -22,19 +22,38 @@
 
       <view class="field">
         <text class="field-label">车牌号码</text>
-        <input class="input" placeholder="请输入您的车牌号" value="{{form.plateNumber}}" data-field="plateNumber" bindinput="onInput" />
+        <!-- 有绑定车牌时用picker选择，没有则手动输入 -->
+        <picker wx:if="{{plateOptions.length > 1}}" mode="selector" range="{{plateOptions}}" range-key="plateNumber" value="{{plateIndex}}" bindchange="onPlateChange">
+          <view class="picker-value">{{form.plateNumber || '请选择车牌号'}}</view>
+        </picker>
+        <input wx:else class="input" placeholder="请输入您的车牌号" value="{{form.plateNumber}}" data-field="plateNumber" bindinput="onInput" />
+        <!-- 选择了"手动输入"时显示输入框 -->
+        <input wx:if="{{useManualPlate && plateOptions.length > 1}}" class="input" placeholder="请输入您的车牌号" value="{{form.plateNumber}}" data-field="plateNumber" bindinput="onInput" />
       </view>
-    </view>
 
-    <view class="form-section">
-      <view class="section-title">常住地址</view>
-      <picker mode="region" bindchange="onRegionChange">
-        <view class="region-grid">
-          <view class="region-cell">{{region[0] || '省份'}}</view>
-          <view class="region-cell">{{region[1] || '城市'}}</view>
-          <view class="region-cell">{{region[2] || '区县'}}</view>
-        </view>
-      </picker>
+      <view class="field">
+        <text class="field-label">常住地址</text>
+        <picker mode="region" bindchange="onRegionChange">
+          <view class="region-grid simple">
+            <view class="region-cell">{{region[0] || '省份'}}</view>
+            <view class="region-cell">{{region[1] || '城市'}}</view>
+            <view class="region-cell">{{region[2] || '区县'}}</view>
+          </view>
+        </picker>
+      </view>
+
+      <view class="field">
+        <text class="field-label">详细地址</text>
+        <input class="input" placeholder="请输入详细地址" value="{{form.detailAddress}}" data-field="detailAddress" bindinput="onInput" />
+      </view>
+
+      <view class="field">
+        <text class="field-label">所属小区</text>
+        <picker wx:if="{{communityList.length > 0}}" mode="selector" range="{{communityList}}" range-key="name" value="{{communityIndex}}" bindchange="onCommunityChange">
+          <view class="picker-value">{{communityName || '请选择所属小区'}}</view>
+        </picker>
+        <view wx:else class="picker-value disabled">暂无小区数据</view>
+      </view>
     </view>
 
     <view class="form-section">
@@ -120,22 +139,6 @@
             </view>
           </view>
         </scroll-view>
-      </view>
-    </view>
-
-    <view class="form-section">
-      <view class="section-title">证明材料</view>
-      <view class="upload-box" bindtap="chooseFile">
-        <view class="upload-icon">☁</view>
-        <text class="upload-title">{{files.length > 0 ? '已选择 ' + files.length + ' 个文件' : '请上传居住证明或就业证明'}}</text>
-        <text class="upload-desc">支持JPG、PNG格式，最大5MB</text>
-        <view class="upload-button">上传文件</view>
-      </view>
-      <view class="file-list" wx:if="{{files.length > 0}}">
-        <view class="file-item" wx:for="{{files}}" wx:key="path">
-          <text class="file-name">证明材料{{index + 1}}</text>
-          <text class="file-remove" data-index="{{index}}" catchtap="removeFile">删除</text>
-        </view>
       </view>
     </view>
 

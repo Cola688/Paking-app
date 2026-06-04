@@ -1,7 +1,7 @@
 const api = require('./utils/api.js');
 const { MAP_TILE_BASE_URL } = require('./utils/config.js');
 
-const getBaseUrl = () => 'http://122.51.76.194:7003/app/api/v1';
+const getBaseUrl = () => 'http://127.0.0.1:7003/app/api/v1';
 
 App({
   globalData: {

@@ -11,7 +11,10 @@
     </view>
 
     <view class="section-card">
-      <view class="section-title">个人信息</view>
+      <view class="section-header">
+        <view class="section-title">个人信息</view>
+        <view class="edit-pill" bindtap="goToInfoEdit">编辑</view>
+      </view>
       <view class="info-row">
         <text class="info-label">姓名</text>
         <text class="info-value">{{displayName}}</text>
@@ -31,6 +34,9 @@
       <view class="vehicle-row" wx:for="{{vehicles}}" wx:key="id">
         <view class="plate-box">{{item.plateNumber}}</view>
         <view class="delete-btn" catchtap="deleteVehicle" data-id="{{item.id}}">删</view>
+      </view>
+      <view class="vehicle-empty" wx:if="{{vehiclesLoaded && vehicles.length === 0}}">
+        暂无绑定车辆
       </view>
       <view class="add-vehicle" bindtap="goToCar">
         <text class="add-icon">＋</text>
@@ -57,13 +63,5 @@
       </view>
     </view>
 
-    <view class="section-card invoice-card">
-      <view class="section-title">发票管理</view>
-      <view class="invoice-row" wx:for="{{invoices}}" wx:key="id">
-        <text class="invoice-title">{{item.title}}</text>
-        <text class="invoice-amount">¥{{item.amount}}</text>
-      </view>
-      <view class="invoice-button" bindtap="applyInvoice">开票申请</view>
-    </view>
   </view>
 </view>

@@ -14,7 +14,9 @@
     "pages/parkingMap/parkingMap",
     "pages/navi/navi",
     "pages/notice/notice",
-    "pages/noticeDetail/noticeDetail"
+    "pages/noticeDetail/noticeDetail",
+    "pages/mine/infoEdit/infoEdit",
+    "pages/car/car"
   ],
   "window": {
     "navigationBarBackgroundColor": "#001f80",
