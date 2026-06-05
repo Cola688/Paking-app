@@ -15,10 +15,6 @@
 
   <view class="info-card">
     <view class="info-row">
-      <text class="info-label">总车位数</text>
-      <text class="info-value">{{parkingInfo.totalSpaces}}个</text>
-    </view>
-    <view class="info-row">
       <text class="info-label">居民已停车位数</text>
       <text class="info-value">{{parkingInfo.residentParkedSpaces}}个</text>
     </view>
@@ -41,6 +37,14 @@
     <view class="info-row">
       <text class="info-label">超时价格</text>
       <text class="info-value">¥{{parkingInfo.overTimePrice}}/小时</text>
+    </view>
+    <view class="info-row">
+      <text class="info-label">包月价格</text>
+      <text class="info-value price">{{parkingInfo.monthlyPrice !== null ? '¥' + parkingInfo.monthlyPrice + '/月' : '暂无'}}</text>
+    </view>
+    <view class="info-row">
+      <text class="info-label">联系电话</text>
+      <text class="info-value">{{parkingInfo.contactPhone || '暂无'}}</text>
     </view>
   </view>
 

@@ -8,6 +8,34 @@
       <text class="desc-text">共和新路街道停车联盟</text>
     </view>
 
+    <!-- 联盟优势 -->
+    <view class="benefits-section">
+      <view class="benefits-title">为什么选择停车联盟？</view>
+      <view class="benefits-list">
+        <view class="benefit-card">
+          <view class="benefit-icon">📅</view>
+          <view class="benefit-info">
+            <text class="benefit-name">包月预约</text>
+            <text class="benefit-desc">支持按月预约车位，无需每天抢位，停车更省心</text>
+          </view>
+        </view>
+        <view class="benefit-card">
+          <view class="benefit-icon">📍</view>
+          <view class="benefit-info">
+            <text class="benefit-name">车位实时查询</text>
+            <text class="benefit-desc">街道内停车场车位情况一目了然，收费标准公开透明</text>
+          </view>
+        </view>
+        <view class="benefit-card">
+          <view class="benefit-icon">💰</view>
+          <view class="benefit-info">
+            <text class="benefit-name">停车优惠</text>
+            <text class="benefit-desc">联盟会员享受停车费用优惠，错峰停车更实惠</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
     <view class="form-section">
       <view class="input-group">
         <text class="input-label">手机号</text>

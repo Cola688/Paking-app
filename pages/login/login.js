@@ -10,6 +10,8 @@ Page({
   },
 
   onLoad(options) {
+    app.globalData.navigatingToLogin = false;
+    api.resetUnauthorizedState();
     const token = wx.getStorageSync('token');
     if (token) {
       this.checkLoginStatus();

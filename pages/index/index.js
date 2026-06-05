@@ -1,6 +1,7 @@
 const app = getApp()
 const api = require('../../utils/api.js')
 const amap = require('../../utils/amap.js')
+const { fixImageUrl } = require('../../utils/config.js')
 
 const DEFAULT_LOCATION = {
   latitude: 22.543099,
@@ -24,7 +25,7 @@ Page({
   onLoad() {
     const token = wx.getStorageSync('token')
     if (!token) {
-      wx.redirectTo({ url: '/pages/login/login' })
+      this.redirectToLogin()
       return
     }
     app.globalData.hasLogin = true
@@ -34,13 +35,24 @@ Page({
   onShow() {
     const token = wx.getStorageSync('token')
     if (!token) {
-      wx.redirectTo({ url: '/pages/login/login' })
+      this.redirectToLogin()
       return
     }
     if (app.globalData.hasLogin) {
       this.initHomeMap()
     }
     this.loadUnreadCount()
+  },
+
+  redirectToLogin() {
+    if (app.globalData.navigatingToLogin) return
+    app.globalData.navigatingToLogin = true
+    wx.redirectTo({
+      url: '/pages/login/login',
+      fail: () => {
+        app.globalData.navigatingToLogin = false
+      }
+    })
   },
 
   async initHomeMap() {
@@ -118,7 +130,14 @@ Page({
       const parks = (res?.data || [])
         .map(item => this.normalizeParkingPoint(item, location))
         .filter(Boolean)
-        .sort((a, b) => a.distanceValue - b.distanceValue)
+        .sort((a, b) => {
+          // 繁忙（无空闲车位）的往后排
+          const aBusy = a.available <= 0 ? 1 : 0
+          const bBusy = b.available <= 0 ? 1 : 0
+          if (aBusy !== bBusy) return aBusy - bBusy
+          // 同组内按距离排序
+          return a.distanceValue - b.distanceValue
+        })
 
       const markerParkingIdMap = {}
       const markers = parks
@@ -187,7 +206,7 @@ Page({
       latitude,
       longitude,
       price: this.toNumber(item.price) || 0,
-      imgUrl: item.imageUrl || '/images/car.png'
+      imgUrl: fixImageUrl(item.imageUrl) || '/images/car.png'
     }
   },
 

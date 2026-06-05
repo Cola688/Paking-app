@@ -1,4 +1,5 @@
 const api = require('../../utils/api.js');
+const { fixImageUrl } = require('../../utils/config.js');
 
 const SPOT_LOCATION_TYPE_TEXT = {
   1: '立体车库',
@@ -32,7 +33,6 @@ Page({
   },
 
   normalizeParkingInfo(item) {
-    const totalSpaces = Math.max(this.toNumber(item.total ?? item.totalSpotCount) || 0, 0);
     const residentParkedSpaces = Math.max(this.toNumber(item.residentParkedSpotCount) || 0, 0);
     const offPeakSpaces = Math.max(this.toNumber(item.offPeakSpotCount ?? item.sharedSpotCount) || 0, 0);
     const available = Math.max(this.toNumber(item.remainingSpotCount ?? item.available ?? item.sharedSpotCount) || 0, 0);
@@ -41,20 +41,21 @@ Page({
       parkingLotId: item.parkingLotId ? String(item.parkingLotId) : '',
       name: item.name || item.parkingAreaName || item.spotCode || '停车点位',
       address: item.address || item.locationDescription || '',
-      totalSpaces,
       residentParkedSpaces,
       offPeakSpaces,
       spotLocationTypeText: this.formatSpotLocationType(item.spotLocationType),
       available,
       firstHourPrice: this.toNumber(item.price) || 0,
       overTimePrice: this.toNumber(item.price) || 0,
+      monthlyPrice: this.toNumber(item.monthlyPrice) || null,
+      contactPhone: item.contactPhone || '暂无',
       hasDiscount: false,
       is24Hour: true,
       hasEV: item.chargingPileSupported === true,
       lat: this.toNumber(item.latitude),
       lng: this.toNumber(item.longitude),
       remark: item.remark || '',
-      imageUrl: item.imageUrl || ''
+      imageUrl: fixImageUrl(item.imageUrl) || ''
     };
   },
 

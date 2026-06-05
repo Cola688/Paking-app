@@ -1,6 +1,14 @@
-const BASE_URL = 'http://127.0.0.1:7003/app/api/v1';
+const DEVTOOLS_BASE_URL = 'http://127.0.0.1:7003/app/api/v1';
+const DEVICE_BASE_URL = 'http://127.0.0.1:7003/app/api/v1';
 
-const getDefaultBaseUrl = () => BASE_URL;
+const getDefaultBaseUrl = () => {
+  try {
+    const platform = wx.getSystemInfoSync().platform;
+    return platform === 'devtools' ? DEVTOOLS_BASE_URL : DEVICE_BASE_URL;
+  } catch (e) {
+    return DEVTOOLS_BASE_URL;
+  }
+};
 
 const getAppData = () => {
   try {
@@ -69,7 +77,7 @@ class Request {
         method,
         data,
         header,
-        timeout: 30000,
+        timeout: 10000,
         success: (res) => {
           wx.hideLoading();
           
@@ -305,26 +313,42 @@ class Request {
     wx.removeStorageSync('userInfo');
     wx.removeStorageSync('username');
     wx.removeStorageSync('tokenTime');
+    let app;
     try {
-      const app = getApp();
+      app = getApp();
       if (app?.globalData) {
         app.globalData.hasLogin = false;
         app.globalData.userInfo = null;
       }
     } catch (e) {}
-    
+
     const pages = getCurrentPages();
     if (pages.length > 0) {
       const currentPage = pages[pages.length - 1];
       const route = currentPage.route;
-      
+
       if (!route.includes('login')) {
+        // 防止重复跳转登录页
+        if (app && app.globalData && app.globalData.navigatingToLogin) {
+          this.unauthorizedPrompting = false;
+          return;
+        }
+        if (app && app.globalData) {
+          app.globalData.navigatingToLogin = true;
+        }
         wx.showModal({
           title: '提示',
           content: '登录已过期，请重新登录',
           showCancel: false,
           success: () => {
-            wx.navigateTo({ url: '/pages/login/login' });
+            wx.navigateTo({
+              url: '/pages/login/login',
+              fail: () => {
+                if (app && app.globalData) {
+                  app.globalData.navigatingToLogin = false;
+                }
+              }
+            });
           },
           complete: () => {
             setTimeout(() => {
@@ -400,14 +424,6 @@ module.exports = {
 
   getUserInfo() {
     return request.get('/auth/user/info');
-  },
-
-  updateUserInfo(data) {
-    return request.post('/auth/user/info', data);
-  },
-
-  bindPhone(phone, code) {
-    return request.post('/auth/user/bind-phone', { phone, code });
   },
 
   refreshToken() {
@@ -497,37 +513,5 @@ module.exports = {
 
   clearNotices(params = {}) {
     return request.delete('/notices', params);
-  },
-
-  speechToText(audioBase64, format = 'mp3', sampleRate = 16000) {
-    return request.post('/ai/speech/recognize', {
-      audio: audioBase64,
-      format,
-      sampleRate
-    });
-  },
-
-  /** 车辆/车牌管理 */
-
-  getUserPlates(params = {}) {
-    return request.get('/user/plates', params);
-  },
-
-  /** 小区 */
-
-  getCommunities() {
-    return request.get('/communities');
-  },
-
-  bindUserPlate(data) {
-    return request.post('/user/plates', data);
-  },
-
-  updateUserPlate(id, data) {
-    return request.put(`/user/plates/${id}`, data);
-  },
-
-  unbindUserPlate(id) {
-    return request.delete(`/user/plates/${id}`);
   }
 };
