@@ -6,7 +6,7 @@ const getBaseUrl = () => {
     const platform = wx.getSystemInfoSync().platform;
     return platform === 'devtools'
       ? 'http://127.0.0.1:7003/app/api/v1'
-      : 'http://127.0.0.1:7003/app/api/v1';
+      : 'http://122.51.76.194:7003/app/api/v1';
   } catch (e) {
     return 'http://127.0.0.1:7003/app/api/v1';
   }
